@@ -5,11 +5,13 @@ namespace core;
  */
  class Core{
 	 /** @var Site $site */
-	public $site;
+	private $site;
 	/** @var Db $db */
-	public $db;
-	/** @var Loader $mvc */
-	public $loader;
+	private $db;
+	/** @var Loader $loader */
+	private $loader;
+	/** @var Url $url */
+	private $url;
 
 	private $allowed_controllers=array();
 	private $default_controller;
@@ -22,18 +24,21 @@ namespace core;
 	 * @param Table $table
 	 */
 	public function __construct(Db $db=null, Site $site=null){
-		$loader=new Loader();
+		$this->setLoader();
+		$this->loader
+						->requireCore('Url')
+						;
 		$this
-						->setLoader($loader)
 						->setDb($db)
 						->setSite($site)
+						->setUrl()
 						->setAllowedControllers()
 						;
 		$this->loader
 						->setDb($this->db)
 						->setSite($this->site)
+						->setUrl($this->url)
 						->requireCore('Report')
-						->requireCore('Url')
 						->requireCore('Model')
 						->requireCore('Controller')
 						->requireCore('View')
@@ -57,6 +62,14 @@ namespace core;
 		return $this;
 	}
 
+	public function getDb(){
+		return $this->db;
+	}
+
+	public function getSite(){
+		return $this->site;
+	}
+
 	private function setActualController(){
 		if(!$this->default_controller){
 			throw new Exception('Default controller didnt set.');
@@ -73,8 +86,13 @@ namespace core;
 		return $this;
 	}
 
-	private function setLoader(Loader $loader){
-		$this->loader=$loader;
+	private function setUrl(){
+		$this->url=new Url();
+		return $this;
+	}
+
+	private function setLoader(){
+		$this->loader=new Loader();
 		return $this;
 	}
 

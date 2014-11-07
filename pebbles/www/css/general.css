@@ -55,8 +55,8 @@ input[type=submit].button{height: 28px;line-height: 28px;}
 li a.button{margin-top: 5px;}
 a.button:hover, input[type=submit].button:hover{text-decoration: none !important;border-color: #999;  border-bottom-color: #ddd;  border-right-color: #ddd;color:black !important;background-color: #eee !important;}
 a.button:active, input[type=submit].button:active{color: white !important;background-color: #666 !important;}
-a.button.add, a.button.delete, a.button.help, a.button.save, a.button.cross,a.button.info,a.button.search,
-input[type=submit].button.add, input[type=submit].button.delete, input[type=submit].button.help, input[type=submit].button.save, input[type=submit].button.cross, input[type=submit].button.info, input[type=submit].button.search{padding-left: 34px;}
+a.button.add, a.button.delete, a.button.help, a.button.save, a.button.cross,a.button.info,a.button.search,a.button.edit,
+input[type=submit].button.add, input[type=submit].button.delete, input[type=submit].button.help, input[type=submit].button.save, input[type=submit].button.cross, input[type=submit].button.info, input[type=submit].button.search, input[type=submit].button.edit{padding-left: 34px;}
 /* add */
 a.button.add, input[type=submit].button.add{background-image: url('./add.png'); background-color: #E3F4BA; color:#72A300;}
 /* delete */
@@ -69,6 +69,8 @@ a.button.help, input[type=submit].button.help{background-image: url('./help.png'
 a.button.info, input[type=submit].button.info{background-image: url('./information.png'); background-color: #E0EFFC; color:#0567B7;}
 /* save */
 a.button.save, input[type=submit].button.save{background-image: url('./disk.png'); background-color: #E0EFFC; color:#0567B7;}
+/* edit */
+a.button.edit, input[type=submit].button.edit{background-image: url('./pencil.png'); background-color: #ffc; color:#0567B7;}
 /* search */
 a.button.search, input[type=submit].button.search{background-image: url('./zoom.png'); background-color: #FFECD3; color:#E0850F;}
 h1,h2,h3{color:#E60042;font-weight: normal;}

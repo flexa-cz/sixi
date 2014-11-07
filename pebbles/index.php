@@ -4,9 +4,9 @@ require_once('../core/include.php');
 core\debuger::set_enable_report(true);
 $core=new core\Core;
 
-$core->db->setMysqlDatabase('doctor')->connect();
+$core->getDb()->setMysqlDatabase('doctor')->connect();
 
-$core->site->requiredCss('general.css');
-$core->site->requiredJs('jquery-1.11.0.min.js');
+$core->getSite()->requiredCss('general.css');
+$core->getSite()->requiredJs('jquery-1.11.0.min.js');
 
 echo $core->printSite();

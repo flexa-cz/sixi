@@ -12,6 +12,7 @@ class Loader{
 	private $db;
 	private $site;
 	private $table;
+	private $url;
 
 	/*	 * *********************************************************************** */
 	/* magic methods */
@@ -53,6 +54,11 @@ class Loader{
 
 	public function setTable(Table $table){
 		$this->table=$table;
+		return $this;
+	}
+
+	public function setUrl(Url $url){
+		$this->url=$url;
 		return $this;
 	}
 
@@ -151,6 +157,9 @@ class Loader{
 							->setLoader($this)
 							->setSite($this->site)
 							;
+		}
+		elseif($object_type==='view'){
+			$object->setUrl($this->url);
 		}
 		if(!$object){
 			throw new Exception('Unexisting class "'.$object_type.'/'.$object_name.'".');

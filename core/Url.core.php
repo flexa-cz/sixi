@@ -1,21 +1,23 @@
 <?php
-class Url{
-	private static $addr_string;
-	private static $query_string;
-	private static $url_array;
-	private static $server_name;
+namespace core;
 
-	public static final function getAddrString(){
-		if(!self::$addr_string){
-			self::parseUrl();
+class Url{
+	private $addr_string;
+	private $query_string;
+	private $url_array;
+	private $server_name;
+
+	public final function getAddrString(){
+		if(!$this->addr_string){
+			$this->parseUrl();
 		}
-		return self::$addr_string;
+		return $this->addr_string;
 	}
 
-	public static final function getQueryString($exceptions=false){
+	public final function getQueryString($exceptions=false){
 		static $cache=array();
-		if(!self::$query_string){
-			self::parseUrl();
+		if(!$this->query_string){
+			$this->parseUrl();
 		}
 		if(!empty($exceptions) && is_array($exceptions) && count($exceptions)){
 			$arr=array();
@@ -36,7 +38,7 @@ class Url{
 			}
 			return $cache[$hash];
 		}
-		return self::$query_string;
+		return $this->query_string;
 	}
 
 	/**
@@ -45,14 +47,14 @@ class Url{
 	 * @param array $exceptions
 	 * @return array
 	 */
-	public static final function getUrlArray($exceptions=false){
-		if(!self::$url_array){
-			self::parseUrl();
+	public final function getUrlArray($exceptions=false){
+		if(!$this->url_array){
+			$this->parseUrl();
 		}
 		if(!empty($exceptions) && is_array($exceptions) && count($exceptions)){
 			$arr=array();
-			if(isset(self::$url_array) && count(self::$url_array)){
-				foreach(self::$url_array as $key => $val){
+			if(isset($this->url_array) && count($this->url_array)){
+				foreach($this->url_array as $key => $val){
 					if(!in_array($key,$exceptions)){
 						$arr[$key]=$val;
 					}
@@ -60,24 +62,24 @@ class Url{
 			}
 			return $arr;
 		}
-		return self::$url_array;
+		return $this->url_array;
 	}
 
-	public static final function getServerName(){
-		if(!self::$server_name){
-			self::parseUrl();
+	public final function getServerName(){
+		if(!$this->server_name){
+			$this->parseUrl();
 		}
-		return self::$server_name;
+		return $this->server_name;
 	}
 
 	private function parseUrl(){
-		self::$server_name=$_SERVER['SERVER_NAME'];
-		self::$query_string=$_SERVER['QUERY_STRING'];
-		self::$addr_string=str_replace('?'.self::$query_string, false, $_SERVER['REQUEST_URI']);
-		$arr=explode('/',self::$addr_string);
+		$this->server_name=$_SERVER['SERVER_NAME'];
+		$this->query_string=$_SERVER['QUERY_STRING'];
+		$this->addr_string=str_replace('?'.$this->query_string, false, $_SERVER['REQUEST_URI']);
+		$arr=explode('/', $this->addr_string);
 		foreach($arr as $val){
 			if($val){
-				self::$url_array[]=$val;
+				$this->url_array[]=$val;
 			}
 		}
 	}

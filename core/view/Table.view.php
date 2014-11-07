@@ -106,7 +106,7 @@ class Table extends core\View{
 				$return.='<span class="desc">&darr;</span> ';
 			}
 			else{
-				$return.='<a href="'.url::getAddrString().'?'.url::getQueryString(array('order_by','desc','asc')).'&order_by='.$name.'&desc" class="desc">&darr;</a> ';
+				$return.='<a href="'.$this->url->getAddrString().'?'.$this->url->getQueryString(array('order_by','desc','asc')).'&order_by='.$name.'&desc" class="desc">&darr;</a> ';
 			}
 
 			// ASC
@@ -114,7 +114,7 @@ class Table extends core\View{
 				$return.='<span class="asc">&uarr;</span> ';
 			}
 			else{
-				$return.='<a href="'.url::getAddrString().'?'.url::getQueryString(array('order_by','desc','asc')).'&order_by='.$name.'&asc" class="asc">&uarr;</a>';
+				$return.='<a href="'.$this->url->getAddrString().'?'.$this->url->getQueryString(array('order_by','desc','asc')).'&order_by='.$name.'&asc" class="asc">&uarr;</a>';
 			}
 			$return.='</span>';
 		}
