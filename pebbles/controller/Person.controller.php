@@ -9,6 +9,7 @@ use core;
 class Person extends core\Controller{
 	private $site_title='Pebbles';
 	private $title='Osoby';
+	private $person_types=array('child'=>'dítě','parent'=>'rodič','doctor'=>'lékař');
 
 	public function render(){
 		$this->site->setTitle($this->site_title);
@@ -24,8 +25,10 @@ class Person extends core\Controller{
 			);
 			if($person['person_type']==='child'){
 				$buttons[]='<a href="?child_id='.$person['id'].'&action=show_parents" class="button info">rodiče</a>';
+				$buttons[]='<a href="?child_id='.$person['id'].'&action=show_doctor" class="button info">lékař</a>';
 			}
 			$person[]=implode(false,$buttons);
+			$person['person_type']=$this->person_types[$person['person_type']];
 			$table[]=$person;
 		}
 		$this->site->addContent(_N.'<h2>'.$this->title.'</h2>');

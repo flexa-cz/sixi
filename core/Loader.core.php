@@ -11,7 +11,6 @@ class Loader{
 	private $already_required_classes=array();
 	private $db;
 	private $site;
-	private $table;
 	private $url;
 
 	/*	 * *********************************************************************** */
@@ -49,11 +48,6 @@ class Loader{
 
 	public function setSite(Site $site){
 		$this->site=$site;
-		return $this;
-	}
-
-	public function setTable(Table $table){
-		$this->table=$table;
 		return $this;
 	}
 

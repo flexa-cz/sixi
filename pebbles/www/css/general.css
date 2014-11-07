@@ -70,7 +70,7 @@ a.button.info, input[type=submit].button.info{background-image: url('./informati
 /* save */
 a.button.save, input[type=submit].button.save{background-image: url('./disk.png'); background-color: #E0EFFC; color:#0567B7;}
 /* edit */
-a.button.edit, input[type=submit].button.edit{background-image: url('./pencil.png'); background-color: #ffc; color:#0567B7;}
+a.button.edit, input[type=submit].button.edit{background-image: url('./pencil.png'); background-color: #ff7; color:#0567B7;}
 /* search */
 a.button.search, input[type=submit].button.search{background-image: url('./zoom.png'); background-color: #FFECD3; color:#E0850F;}
 h1,h2,h3{color:#E60042;font-weight: normal;}
