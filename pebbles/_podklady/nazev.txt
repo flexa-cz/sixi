@@ -1,0 +1,25 @@
+Takže jsem nad názvem hluboce hloubal a zvažoval název z mnoha různých úhlů, tak aby i významově dával hlubší smysl a souvislost se zaměřením programu. Zároveň bylo nutné se oprostit od mých subjektivních pocitů a nabídnout možnost distribuovat i jiným terapeutům avšak s podobným zaměřením.
+Klíčovými oblastmi, dle kterých jsem volil jsou: dítě, vývoj, terapie, stavba, držení, poloha, seskupení - seznam - databáze, ....
+
+Pebbles je z anglického jazyka a znamená kamínky, oblázky,...
+
+- skupinka malých dětí povalujících se na hrací podložce a jejich holé hlavičky
+- kypré, oblé, zaoblené tvary dětského těla
+- mají různý věk i stáří (širší rozsah věku pacienta)
+- databáze jednotlivých "kamínků", postupné přídávání, editace
+- jako malé oblázky v řadě vypadají prstíky na dětských nohou jejichž vývojem se řadu let zabývám a který se velmi často terapeuticky řeší v ordinacích a v tomto věku
+- oblázky na sobě nedrží, potřebují poskládat
+- oblázky je dobré správně poskládat aby nespadly a tvořily funkční celek
+- jejich tvar je různý a přístup musí být individuální
+- kamínků jsou v řece (státě, městě) tisíce a najdou se mezi nimy kazy
+- jako oblázky se dají do programu přidávat funkce, lze jej rozšiřovat (moduly?)
+- tak jako jsou sběratelé minerálů, tak i Pebbles 1.0 je sbírkou, seznamem, databází...
+- ...
+
+No a tak dál by se dalo jistě něco vymyslet, kdyby se chtělo pochopit význam názvu programu ;-)
+
+Mimochodem, není označení verze 1.0 příliš ukvapené? Neměla by to být nejprve Beta verze? :-) Dost se těším, až v ostrém provozu budu zaznámenávat a konzultovat s tebou bugy :-)
+
+dok.
+
+p.s.: mám pro tebe další funkci do programu, ale to jsi asi chtěl slyšet dřív, že? :-)
