@@ -7,9 +7,12 @@ use core;
  * @author Vlahovic
  */
 class Person extends core\Controller{
+	private $site_title='Pebbles';
 	private $title='Osoby';
 
 	public function render(){
+		$this->site->setTitle($this->site_title);
+		$this->site->addContent(_N.'<h1>'.$this->site_title.'</h1>');
 		// seznam osob
 		$model_person=$this->loader->getModel('Person');
 		$persons=$model_person->printPersons();
