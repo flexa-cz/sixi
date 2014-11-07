@@ -23,9 +23,5 @@ core\debuger::set_ui('inline');
 require_once(_ROOT.'core/constants.php');
 
 // core tridy
-require_once(_ROOT.'core/Core.class.php');
-require_once(_ROOT.'core/Loader.class.php');
-
-// staticke tridy
-require_once(_ROOT.'core/Report.class.php');
-require_once(_ROOT.'core/Url.class.php');
+require_once(_ROOT.'core/Core.php');
+require_once(_ROOT.'core/Loader.core.php');
