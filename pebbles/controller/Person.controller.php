@@ -26,7 +26,8 @@ class Person extends core\Controller{
 			$table[]=$person;
 		}
 		$this->site->addContent(_N.'<h2>'.$this->title.'</h2>');
-		$this->site->addContent($this->table->setHeader(array('ID','typ','jméno','příjmení','datum narození','akce'))->setRows($table));
+		$person_table=$this->loader->getView('Table')->setOrderBy(true)->setHeader(array('ID','typ','jméno','příjmení','datum narození','akce'))->setRows($table);
+		$this->site->addContent($person_table);
 		$add_button='<a href="?child_id='.$person['id'].'" class="button add">novy</a>';
 		$this->site->addContent($add_button);
 		return $this;

@@ -1,21 +1,12 @@
 <?php
 namespace core;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of Controller
+ * Description of View
  *
  * @author Pragodata {@link http://www.pragodata.cz} Vlahovic
- * @since 7.11.2014, 11:56:55
+ * @since 7.11.2014, 15:01:15
  */
-class Controller{
-	protected $loader;
-	protected $site;
-
+class View{
 	/*	 * *********************************************************************** */
 	/* magic methods */
 	/*	 * *********************************************************************** */
@@ -23,16 +14,6 @@ class Controller{
 	/*	 * *********************************************************************** */
 	/* public methods */
 	/*	 * *********************************************************************** */
-
-	public function setLoader(Loader $loader){
-		$this->loader=$loader;
-		return $this;
-	}
-
-	public function setSite(Site $site){
-		$this->site=$site;
-		return $this;
-	}
 
 	/*	 * *********************************************************************** */
 	/* protected methods */

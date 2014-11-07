@@ -97,15 +97,15 @@ class Loader{
 			$lower_object_name=strtolower($object_name);
 			$uc_first_object_name=ucfirst($object_name);
 			$file_paths=array(
-					$file_root.$object_name.'.php',
-					$file_root.$object_name.'.class.php',
 					$file_root.$object_name.'.'.$object_type.'.php',
-					$file_root.$lower_object_name.'.php',
-					$file_root.$lower_object_name.'.class.php',
 					$file_root.$lower_object_name.'.'.$object_type.'.php',
-					$file_root.$uc_first_object_name.'.php',
 					$file_root.$uc_first_object_name.'.'.$object_type.'.php',
 			);
+			if($object_type==='view'){
+				$file_paths[]=_ROOT.'core/'.$object_type.'/'.$object_name.'.'.$object_type.'.php';
+				$file_paths[]=_ROOT.'core/'.$object_type.'/'.$lower_object_name.'.'.$object_type.'.php';
+				$file_paths[]=_ROOT.'core/'.$object_type.'/'.$uc_first_object_name.'.'.$object_type.'.php';
+			}
 			$file_exists=false;
 			foreach($file_paths as $path){
 				if(file_exists($path)){
@@ -134,8 +134,15 @@ class Loader{
 	}
 
 	private function loadObject($object_type, $object_name){
-		$class=($object_type==='core' ? 'core\\'.$object_name : _PROJECT.'\\'.$object_type.'\\'.$object_name);
-		$object=new $class;
+		$object=false;
+		$class_my=($object_type==='core' ? 'core\\'.$object_name : _PROJECT.'\\'.$object_type.'\\'.$object_name);
+		$class_core=($object_type==='core' ? false : 'core\\'.$object_type.'\\'.$object_name);
+		if(class_exists($class_my)){
+			$object=new $class_my;
+		}
+		elseif($class_core && class_exists($class_core)){
+			$object=new $class_core;
+		}
 		if($object_type==='model'){
 			$object->setDb($this->db);
 		}
@@ -143,8 +150,10 @@ class Loader{
 			$object
 							->setLoader($this)
 							->setSite($this->site)
-							->setTable($this->table)
 							;
+		}
+		if(!$object){
+			throw new Exception('Unexisting class "'.$object_type.'/'.$object_name.'".');
 		}
 		return $object;
 	}

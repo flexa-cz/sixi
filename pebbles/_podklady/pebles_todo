@@ -10,8 +10,8 @@ D - hotovo
 | UKOLY |
 ---------
 - udelat praci s view
-	- default view (zatim bez funkcnosti)
-	- table prevest na view a taky tak s nim pracovat
+	- do view posilat pres default object Url
+- Url predelat ze staticke na normalni
 - udelat praci s layout
 	- default layout v core
 - prace s vyjimkami
@@ -23,6 +23,9 @@ D - hotovo
 ----------
 | HOTOVO |
 ----------
+- udelat praci s view
+	D 7.11.14 15:30- default view (zatim bez funkcnosti)
+	D 7.11.14 15:31 - table prevest na view a taky tak s nim pracovat
 
 --------------------------------------------------------------------------------
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
