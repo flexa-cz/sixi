@@ -1,0 +1,92 @@
+/* ************************************************************************** */
+/* obecne																																			*/
+/* ************************************************************************** */
+body{font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 10pt;}
+
+/* ************************************************************************** */
+/* formulare																																	*/
+/* ************************************************************************** */
+fieldset{width: 750px;padding: 1em;border:1px solid #09f;margin: 0 0 1em 0;}
+legend{color: #09f;font-style: italic;font-size: 70%;}
+label{width:240px;float: left;clear: both;margin-top: 5px;font-size: 80%;}
+input[type=text],select,textarea{width:500px;float: left;margin-top: 5px;}
+input.WidthAuto,select.WidthAuto,textarea.WidthAuto,.WidthAuto{width: auto;}
+
+/* ************************************************************************** */
+/* report																																			*/
+/* ************************************************************************** */
+div.report {font-weight: normal;font-size: 100%;padding: 0.5em 1em 0.5em 48px;background-position: 16px;background-repeat: no-repeat;text-align: left;font-family: georgia, "Times New Roman", Times, serif;margin: .5em 0 0.5em 0;}
+div.report p{padding: 0;margin: .5em 0;}
+div.report.alert{background-color: #ffc;border: 1px solid #BDBF00;background-image: url('./error.png');}
+div.report.accept{background-color: #f5f8ef;border: 1px solid green;background-image: url('./tick.png');}
+div.report.warning{background-color: #FFDFDF;border: 1px solid red;background-image: url('./cross.png');}
+div.report.info{background-color: #EFFBFF;border: 1px solid #00A5DF;background-image: url('./help.png');}
+
+/* ************************************************************************** */
+/* tabulky																																		*/
+/* ************************************************************************** */
+table{border-collapse: collapse;border: 2px solid #aaa;width: 100%;}
+td,th{border: 1px solid #aaa;padding: 2px 5px 2px 5px;background-color: white;text-align: left;}
+th.LineNum{background-color: #8DC40D;}
+td.LineNum{background-color: #E8E8E8;}
+tr:nth-child(even) td{background-color: #F6FFCE;}
+tr:nth-child(even) td.LineNum{background-color: #DBE2B7;}
+th{background-color: #C9F600;font-weight: normal;border-bottom: 2px solid #aaa;}
+
+tr.Inactive td{background-color: #eee;color:#777;}
+tr.Inactive td.LineNum{background-color: #ddd;}
+tr.Inactive:nth-child(even) td{background-color: #ddd;}
+tr.Inactive:nth-child(even) td.LineNum{background-color:#ccc;}
+
+tr:hover td,tr.Inactive:hover td{background-color: #F26D93;}
+tr:hover td.LineNum,tr.Inactive:hover td.LineNum{background-color: #AC2B50;}
+
+span.OrderBy a, span.OrderBy span{border:2px solid white;border-radius:8px;height: 12px; width: 12px;line-height: 12px;background-color: #bbb;text-decoration: none;font-size: 18px;display: inline-block;text-align: center;overflow: hidden;color:white;margin: 2px 0 -2px 0;}
+span.OrderBy a.desc, span.OrderBy span.desc{line-height: 0px;}
+span.OrderBy a:hover{background-color: #540EAD;}
+span.OrderBy span{background-color: #E60042;}
+
+/* ************************************************************************** */
+/* buttons add, delete, edit...																								*/
+/* ************************************************************************** */
+/* obecne */
+a.button, input[type=submit].button{display: inline-block;height: 26px; line-height: 28px; padding: 0 10px;margin: 5px 5px 0 0;background-repeat: no-repeat;background-position: 10px 5px; font-weight: bold !important; text-decoration: none;border: 1px solid #ddd;  border-bottom-color: #bbb;  border-right-color: #bbb;overflow: hidden;color:#888;text-align: left;width: auto;text-transform:lowercase;cursor: pointer;	cursor: hand; top:0;bottom:0;clear: none !important;outline: none;float: none;clear: none;border-radius: 13px;}
+input[type=submit].button{height: 28px;line-height: 28px;}
+li a.button{margin-top: 5px;}
+a.button:hover, input[type=submit].button:hover{text-decoration: none !important;border-color: #999;  border-bottom-color: #ddd;  border-right-color: #ddd;color:black !important;background-color: #eee !important;}
+a.button:active, input[type=submit].button:active{color: white !important;background-color: #666 !important;}
+a.button.add, a.button.delete, a.button.help, a.button.save, a.button.cross,a.button.info,a.button.search,
+input[type=submit].button.add, input[type=submit].button.delete, input[type=submit].button.help, input[type=submit].button.save, input[type=submit].button.cross, input[type=submit].button.info, input[type=submit].button.search{padding-left: 34px;}
+/* add */
+a.button.add, input[type=submit].button.add{background-image: url('./add.png'); background-color: #E3F4BA; color:#72A300;}
+/* delete */
+a.button.delete, input[type=submit].button.delete{background-image: url('./delete.png'); background-color: #FCD8D4; color:#DB1900;}
+/* cross */
+a.button.cross, input[type=submit].button.cross{background-image: url('./cross.png'); background-color: #FCD8D4; color:#DB1900;}
+/* help */
+a.button.help, input[type=submit].button.help{background-image: url('./help.png'); background-color: #E0EFFC; color:#0567B7;}
+/* info */
+a.button.info, input[type=submit].button.info{background-image: url('./information.png'); background-color: #E0EFFC; color:#0567B7;}
+/* save */
+a.button.save, input[type=submit].button.save{background-image: url('./disk.png'); background-color: #E0EFFC; color:#0567B7;}
+/* search */
+a.button.search, input[type=submit].button.search{background-image: url('./zoom.png'); background-color: #FFECD3; color:#E0850F;}
+h1,h2,h3{color:#E60042;font-weight: normal;}
+h1{font-size: 160%;}
+h2{font-size: 140%;}
+h3{font-size: 120%;}
+/* ************************************************************************** */
+
+/* ************************************************************************** */
+/* icons add, delete, edit...																									*/
+/* ************************************************************************** */
+.icon{background-repeat: no-repeat; background-position: center; height: 16px; width: 16px;font-size: 0px !important;padding: 0 !important;margin: 0 !important;}
+.icon.edit{background-image: url('./pencil.png');}
+.icon.delete{background-image: url('./cross.png');}
+/* ************************************************************************** */
+
+/* ************************************************************************** */
+/* texty																																			*/
+/* ************************************************************************** */
+span.search-result{background-color: yellow;}
+/* ************************************************************************** */
