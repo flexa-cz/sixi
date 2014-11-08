@@ -66,9 +66,66 @@ class site{
 		return $this->required('css', $file_name);
 	}
 
+	final public function printGetVariable($name, $default=null){
+		return $this->printVariable('get',$name,$default);
+	}
+
+	final public function printPostVariable($name, $default=null){
+		return $this->printVariable('post',$name,$default);
+	}
+
+	final public function printSessionVariable($name, $default=null){
+		return $this->printVariable('session',$name,$default);
+	}
+
+	final public function printServerVariable($name, $default=null){
+		return $this->printVariable('server',$name,$default);
+	}
+
+	final public function printCookieVariable($name, $default=null){
+		return $this->printVariable('cookie',$name,$default);
+	}
+
+	final public function printFilesVariable($name, $default=null){
+		return $this->printVariable('files',$name,$default);
+	}
+
+	final public function printRequesVariable($name, $default=null){
+		return $this->printVariable('request',$name,$default);
+	}
+
+	final public function printEnvVariable($name, $default=null){
+		return $this->printVariable('env',$name,$default);
+	}
+
 	/* ************************************************************************ */
 	/* private methods																													*/
 	/* ************************************************************************ */
+
+	final private function printVariable($type, $name, $default){
+		$return=$default;
+		$source=false;
+		$types=array(
+				'get'=>$_GET,
+				'post'=>$_POST,
+				'session'=>(!empty($_SESSION) ? $_SESSION : null),
+				'server'=>$_SERVER,
+				'cookie'=>$_COOKIE,
+				'files'=>$_FILES,
+				'request'=>$_REQUEST,
+				'env'=>$_ENV,
+				);
+		if(!empty($types[$type])){
+			$source=$types[$type];
+		}
+		else{
+			throw new Exception('Unknown type of data source "'.$type.'".');
+		}
+		if($source){
+			$return=(!empty($source[$name]) ? $source[$name] : $default);
+		}
+		return $return;
+	}
 
 	final private function required($type, $file_name){
 		$file_url='www/'.$type.'/'.$file_name;

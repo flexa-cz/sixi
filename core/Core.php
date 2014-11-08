@@ -75,7 +75,7 @@ namespace core;
 			throw new Exception('Default controller didnt set.');
 		}
 		else{
-			$controller=(!empty($_GET['controller']) ? $_GET['controller'] : $this->default_controller);
+			$controller=$this->site->printGetVariable('controller', $this->default_controller);
 			if(!in_array($controller, $this->allowed_controllers)){
 				throw new Exception('Not allowed controller "'.$controller.'".');
 			}
