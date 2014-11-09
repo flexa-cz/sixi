@@ -26,6 +26,7 @@ namespace core;
 	public function __construct(Db $db=null, Site $site=null){
 		$this->setLoader();
 		$this->loader
+						->requireCore('Exception')
 						->requireCore('Url')
 						;
 		$this

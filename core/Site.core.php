@@ -115,7 +115,7 @@ class site{
 				'request'=>$_REQUEST,
 				'env'=>$_ENV,
 				);
-		if(!empty($types[$type])){
+		if(isset($types[$type])){
 			$source=$types[$type];
 		}
 		else{
