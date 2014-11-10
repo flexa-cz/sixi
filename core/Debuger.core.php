@@ -203,13 +203,15 @@ class debuger{
 			}
 			// vypise
 			$report=false;
-			$report.="\r\n<!-- *************************************************** -->";
-			$report.="\r\n<!-- BEGIN DEBUGER -->";
-			$report.="\r\n<!-- *************************************************** -->";
-			$report.=($this->report ? "\r\n<div class=\"debuger-report\"><h1>debuger report".($report_name ? ': '.$report_name : false)."</h1>\r\n<table>\r\n\t<tr><th>&nbsp;</th><th>&micro; time</th><th>type</th><th>file</th><th>line</th><th>value</th></tr>".$this->report."\r\n</table>\r\n</div>" : false);
-			$report.="\r\n<!-- *************************************************** -->";
-			$report.="\r\n<!-- END DEBUGER -->";
-			$report.="\r\n<!-- *************************************************** -->";
+			if($this->report){
+				$report.="\r\n<!-- *************************************************** -->";
+				$report.="\r\n<!-- BEGIN DEBUGER -->";
+				$report.="\r\n<!-- *************************************************** -->";
+				$report.="\r\n<div class=\"debuger-report\"><h1>debuger report".($report_name ? ': '.$report_name : false)."</h1>\r\n<table>\r\n\t<tr><th>&nbsp;</th><th>&micro; time</th><th>type</th><th>file</th><th>line</th><th>value</th></tr>".$this->report."\r\n</table>\r\n</div>";
+				$report.="\r\n<!-- *************************************************** -->";
+				$report.="\r\n<!-- END DEBUGER -->";
+				$report.="\r\n<!-- *************************************************** -->";
+			}
 			$this->report=false;
 			if($echo){
 				echo $report;
