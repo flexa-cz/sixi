@@ -1,7 +1,7 @@
 <?php
 /**
  * aby se nemusely vsechny soubory vkladat porad rucne do vsech souboru, ktere s nimi budou pracovat...
- * navic definuje konstantu _ROOT s absolutni adresou do rootu domeny
+ * navic definuje konstantu _ROOT s absolutni adresou do rootu frameworku
  *
  * @since 29.11.11 9:07
  * @author Vlahovic
