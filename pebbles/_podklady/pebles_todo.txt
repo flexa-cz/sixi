@@ -9,7 +9,6 @@ D - hotovo
 ---------
 | UKOLY |
 ---------
-- udelat praci s view
 - udelat praci s layout
 	- default layout v core
 - prace s vyjimkami
@@ -17,12 +16,14 @@ D - hotovo
 - site je podivnost
 	- do layoutu predavat objekt s daty a od vystup layoutu zachytit a vratit jako string
 	- site asi odstranit, nebo vymyslet, k cemu by to mohlo byt dobre
-- rozlisovac produkcniho a testovaciho prostredi (asi v konfigu)
 - core view Buttons
 
 ----------
 | HOTOVO |
 ----------
+D 10.11.14 10:16 - rozlisovac produkcniho a testovaciho prostredi (asi v konfigu)
+D 10.11.14 10:16 - udelat praci s view
+D 10.11.14 10:15 - debuger (zmena ze staticke tridy, zacleneni do core)
 D 8.11.14 23:08 - Url predelat ze staticke na normalni
 - udelat praci s view
 	D 8.11.14 23:08 - do view posilat pres default object Url
