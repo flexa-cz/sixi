@@ -1,7 +1,7 @@
 <?php
 namespace core;
 
-class Url{
+class Url extends Core{
 	private $addr_string;
 	private $query_string;
 	private $url_array;

@@ -6,7 +6,7 @@ namespace core;
  * @author Pragodata {@link http://www.pragodata.cz} Vlahovic
  * @since 7.11.2014, 15:01:15
  */
-class View{
+class View extends Core{
 	protected $url;
 	/*	 * *********************************************************************** */
 	/* magic methods */

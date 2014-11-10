@@ -1,12 +1,11 @@
 <?php
 // nezbytnosti
 require_once('../core/include.php');
-core\debuger::set_enable_report(true);
-$core=new core\Core;
+$sixi=new core\Sixi;
+$sixi->setEnableDebuger(true);
+$sixi->getDb()->setMysqlDatabase('doctor')->connect();
 
-$core->getDb()->setMysqlDatabase('doctor')->connect();
+$sixi->getSite()->requiredCss('general.css');
+$sixi->getSite()->requiredJs('jquery-1.11.0.min.js');
 
-$core->getSite()->requiredCss('general.css');
-$core->getSite()->requiredJs('jquery-1.11.0.min.js');
-
-echo $core->printSite();
+echo $sixi->printSite();

@@ -12,7 +12,7 @@
  * - zakladni operace se stromem
  * - presuny a zmeny uzlu ciste pomoci mysql
  */
-class TreeTraversal{
+class TreeTraversal extends Core{
 	/** @var moodle_database $db */
 	protected $db;
 	protected $table;

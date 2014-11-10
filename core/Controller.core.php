@@ -12,7 +12,7 @@ namespace core;
  * @author Pragodata {@link http://www.pragodata.cz} Vlahovic
  * @since 7.11.2014, 11:56:55
  */
-class Controller{
+class Controller extends Core{
 	protected $loader;
 	protected $site;
 

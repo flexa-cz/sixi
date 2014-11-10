@@ -13,7 +13,7 @@ class Person extends core\Controller{
 
 	public function render(){
 		$action=$this->site->printGetVariable('action');
-		echo '<div style="background: red; color: #ffc; font-weight: bold; padding: .3em 1em; margin: 1em 0 0 0; font-size: 130%; font-family: Courier, monospace;">$action</div><div style="border: 1px solid red; background: #ffc; padding: 1em; margin: 0 0 1em 0; overflow: auto; font-family: Courier, monospace;"><pre>';var_export($action);echo '</pre><p style="font-size: 75%; color: red;">';foreach(debug_backtrace() as $values){echo '<em># <b>file:</b> '.$values['file'].'; <b>line:</b> '.$values['line'].'; <b>function:</b> '.$values['class'].'::'.$values['function'].'</em><br>';}echo '<br><b>file: </b>'.__FILE__.'<br><b>line: </b>'.__LINE__.'</p></div>';
+		$this->debuger->var_dump($action);
 		$this->site->setTitle($this->site_title);
 		$this->site->addContent(_N.'<h1>'.$this->site_title.'</h1>');
 		// seznam osob

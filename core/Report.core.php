@@ -3,7 +3,7 @@ namespace core;
 /**
  * spravuje hlaseni (potvrzovaci, varovna, chybova, informativni)
  */
-class Report{
+class Report extends Core{
 	private static $default_report_name='default';
 	private static $report_name=false;
 	private static $instances=array();

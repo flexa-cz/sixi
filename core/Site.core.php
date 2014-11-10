@@ -3,7 +3,7 @@ namespace core;
 /**
  * resi html stranu a jeji nezbytne soucasti...
  */
-class site{
+class Site extends Core{
 	private $site=false;
 	private $content=false;
 	private $title=false;
@@ -170,6 +170,9 @@ class site{
 		if(!empty($this->header)){
 			$r.=_N_T.implode(_N_T,$this->header);
 		}
+		$r.=_N.'<style>';
+		$r.=_N.$this->debuger->get_css();
+		$r.=_N.'</style>';
 		$r.=_N.'</head>';
 		$r.=_N.'<body>';
 		return $r;
@@ -183,7 +186,7 @@ class site{
 	 * @return string
 	 */
 	final private function footer(){
-		$r=debuger::get_panel();
+		$r=$this->debuger->get_panel();
 		$r.=_N.'</body>';
 		$r.=_N.'</html>';
 		return $r;

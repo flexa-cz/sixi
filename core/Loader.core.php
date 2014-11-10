@@ -6,7 +6,7 @@ namespace core;
  * @author Pragodata {@link http://www.pragodata.cz} Vlahovic
  * @since 5.11.2014, 15:27:55
  */
-class Loader{
+class Loader extends Core{
 	private $objects=array('core','model','view','controller');
 	private $already_required_classes=array();
 	private $db;
@@ -154,6 +154,9 @@ class Loader{
 		}
 		elseif($object_type==='view'){
 			$object->setUrl($this->url);
+		}
+		if(method_exists($object, 'setDebuger')){
+			$object->setDebuger($this->debuger);
 		}
 		if(!$object){
 			throw new Exception('Unexisting class "'.$object_type.'/'.$object_name.'".');

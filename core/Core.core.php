@@ -7,14 +7,14 @@ namespace core;
  */
 
 /**
- * Description of Model
+ * Description of Core
  *
  * @author Pragodata {@link http://www.pragodata.cz} Vlahovic
- * @since 7.11.2014, 11:35:05
+ * @since 10.11.2014, 9:00:55
  */
-class Model extends Core{
-	protected $db;
-
+class Core{
+	/** @var Debuger $debuger */
+	protected  $debuger;
 	/*	 * *********************************************************************** */
 	/* magic methods */
 	/*	 * *********************************************************************** */
@@ -23,8 +23,8 @@ class Model extends Core{
 	/* public methods */
 	/*	 * *********************************************************************** */
 
-	public function setDb(Db $db){
-		$this->db=$db;
+	public function setDebuger(Debuger $debuger){
+		$this->debuger=$debuger;
 		return $this;
 	}
 

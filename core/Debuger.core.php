@@ -1,5 +1,5 @@
 <?php
-
+namespace core;
 /**
  * nastroj pro debugovani...
  * cim driv se nacte do programu tim driv se bude merit microtime
@@ -10,19 +10,22 @@
  * @author Vlahovic
  */
 class debuger{
-	private static $ui='popup';
-	private static $ui_posibilities=array('inline','popup');
-	private static $ui_panel_displayed=false;
-	private static $backtrace;
-	private static $backtrace_level=1;
-	private static $enable_report=false;
-	private static $file;
-	private static $line;
-	private static $report;
-	private static $type;
-	private static $value;
-	private static $localhost=false;
+	private $ui='popup';
+	private $ui_posibilities=array('inline','popup');
+	private $ui_panel_displayed=false;
+	private $backtrace;
+	private $backtrace_level=1;
+	private $enable_report=false;
+	private $file;
+	private $line;
+	private $report;
+	private $type;
+	private $value;
+	private $localhost=false;
 
+	public function __construct() {
+		define('_DEBUGER_MICROTIME_START', $this->get_microtime());
+	}
 
 	/* ************************************************************************ */
 	/* public methods 																													*/
@@ -34,16 +37,16 @@ class debuger{
 	 *
 	 * @param boolean $enable
 	 */
-	static public final function set_enable_report($enable){
-		if(self::$localhost){
-			if(self::$enable_report || $enable){
-				self::set_backtrace();
-				self::$type='set_enable_report';
-				self::$value=($enable ? 1 : 0);
-				self::set_report();
+	public final function set_enable_report($enable){
+		if($this->localhost){
+			if($this->enable_report || $enable){
+				$this->set_backtrace();
+				$this->type='set_enable_report';
+				$this->value=($enable ? 1 : 0);
+				$this->set_report();
 			}
 
-			self::$enable_report=($enable ? true : false);
+			$this->enable_report=($enable ? true : false);
 		}
 	}
 
@@ -53,8 +56,8 @@ class debuger{
 	 *
 	 * @param boolean $localhost
 	 */
-	static public final function set_localhost($localhost){
-		self::$localhost=($localhost ? true : false);
+	public final function set_localhost($localhost){
+		$this->localhost=($localhost ? true : false);
 	}
 
 	/**
@@ -62,30 +65,28 @@ class debuger{
 	 *
 	 * @param string $ui [inline|popup]
 	 */
-	static public final function set_ui($ui){
-		if(self::$localhost){
-			if(in_array($ui, self::$ui_posibilities)){
-				self::$ui=$ui;
+	public final function set_ui($ui){
+		if($this->localhost){
+			if(in_array($ui, $this->ui_posibilities)){
+				$this->ui=$ui;
 			}
 		}
 	}
 
 	/* public get methods */
 
-	static public final function get_microtime(){
-		$ms=0;
-		$s=0;
+	public final function get_microtime(){
 		$microtime=microtime();
 		list($ms,$s)=explode(' ', $microtime);
 		return (float)$ms+(float)$s;
 	}
 
-	static public final function get_css(){
-		if(self::$localhost){
+	public final function get_css(){
+		if($this->localhost){
 			$tables="
 	/* samotne tabulky s debug vypisem */
 	body{margin-bottom: 70px !important;}
-	div.debuger-report{width:100% !important;overflow: auto !important; background-color: white !important; text-align: left !important; padding: 5px  !important; font-family: Verdana, Geneva, Arial, Helvetica, sans-serif !important; font-size: 18px;clear: both;".(self::$ui=='popup' ? 'display: none;' : false)."}
+	div.debuger-report{width:100% !important;overflow: auto !important; background-color: white !important; text-align: left !important; padding: 5px  !important; font-family: Verdana, Geneva, Arial, Helvetica, sans-serif !important; font-size: 18px;clear: both;".($this->ui=='popup' ? 'display: none;' : false)."}
 	div.debuger-report h1{color:black;margin: 0 0 1em 0 !important; padding: 0 !important; font-size:100% !important;}
 	div.debuger-report table{border-collapse: collapse !important;background-color: white !important;border: 1px solid black !important;z-index: 1000000000 !important; -moz-box-shadow: 0px 0px 5px 0px #ccc; -webkit-box-shadow: 0px 0px 5px 0px #ccc; box-shadow: 0px 0px 5px 0px #ccc;}
 	div.debuger-report table tr{border:1px solid black  !important;}
@@ -122,19 +123,19 @@ class debuger{
 	/* ************************************************************************** */
 	$tables
 	$rows
-	".(self::$ui=='popup' ? $panel : false)."
+	".($this->ui=='popup' ? $panel : false)."
 	/* ************************************************************************** */
 	";
 			return $css;
 		}
 	}
 
-	static public final function get_panel(){
-		if(self::$localhost){
+	public final function get_panel(){
+		if($this->localhost){
 			// vypise pripadne nevypsane reporty
-			$panel=self::report(false,false);
-			if(self::$ui=='popup' && !self::$ui_panel_displayed){
-				self::$ui_panel_displayed=true;
+			$panel=$this->report(false,false);
+			if($this->ui=='popup' && !$this->ui_panel_displayed){
+				$this->ui_panel_displayed=true;
 				$panel.='<div id="debuger-panel">';
 				$panel.='<strong>DebugerPanel</strong>';
 				$panel.='</id>';
@@ -151,57 +152,65 @@ class debuger{
 	 *
 	 * @author Vlahovic
 	 */
-	static public final function breakpoint($value=false){
-		if(self::$localhost){
-			if(self::$enable_report){
-				self::set_backtrace();
-				self::$type='breakpoint';
-				self::$value=($value ? '<pre>'.htmlentities($value).'</pre>' : '&mdash;');
-				self::set_report();
+	public final function breakpoint($value=false){
+		if($this->localhost){
+			if($this->enable_report){
+				$this->set_backtrace();
+				$this->type='breakpoint';
+				$this->value=($value ? '<pre>'.htmlentities($value).'</pre>' : '&mdash;');
+				$this->set_report();
 			}
 		}
 	}
 
-	static public final function backtrace(){
-		if(self::$enable_report){
-			self::set_backtrace();
-			self::$type='backtrace';
-			self::$value='<pre>'.print_r(self::$backtrace,true).'</pre>';
-			self::set_report();
+	public final function backtrace(){
+		if($this->enable_report){
+			$this->set_backtrace();
+			$this->type='backtrace';
+			$this->value='<pre>'.print_r($this->backtrace,true).'</pre>';
+			$this->set_report();
 		}
 	}
 
-	static public final function var_dump($var){
-		if(self::$localhost){
-			if(self::$enable_report){
-				self::set_backtrace();
-				self::$type='var_dump';
-				self::$value=self::catch_var_dump($var);
-				self::set_report();
+	public final function var_dump($var){
+		if($this->localhost){
+			if($this->enable_report){
+				$this->set_backtrace();
+				$this->type='var_dump';
+				$this->value=$this->catch_var_dump($var);
+				$this->set_report();
 			}
 		}
+		return $this;
 	}
 
 
 	/**
 	 * vraci hlaseni
 	 *
-	 * @param string $debuber_name [optional] nazev daneho reportu
+	 * @param string $report_name [optional] nazev daneho reportu
 	 * @param boolean $echo [optional] kdyz je true, tak rovnou vypise, jinak vrati
 	 * @return mixed
 	 */
-	static public final function report($report_name=false,$echo=true){
-		if(self::$localhost){
+	public final function report($report_name=false,$echo=true){
+		if($this->localhost){
 			// info o tom kde bylo vypsano
-			if(self::$report){
-				self::set_backtrace();
-				self::$type='report';
-				self::$value='&mdash;';
-				self::set_report();
+			if($this->report){
+				$this->set_backtrace();
+				$this->type='report';
+				$this->value='&mdash;';
+				$this->set_report();
 			}
 			// vypise
-			$report=(self::$report ? "\r\n<div class=\"debuger-report\"><h1>debuger report".($report_name ? ': '.$report_name : false)."</h1>\r\n<table>\r\n\t<tr><th>&nbsp;</th><th>&micro; time</th><th>type</th><th>file</th><th>line</th><th>value</th></tr>".self::$report."\r\n</table>\r\n</div>" : false);
-			self::$report=false;
+			$report=false;
+			$report.="\r\n<!-- *************************************************** -->";
+			$report.="\r\n<!-- BEGIN DEBUGER -->";
+			$report.="\r\n<!-- *************************************************** -->";
+			$report.=($this->report ? "\r\n<div class=\"debuger-report\"><h1>debuger report".($report_name ? ': '.$report_name : false)."</h1>\r\n<table>\r\n\t<tr><th>&nbsp;</th><th>&micro; time</th><th>type</th><th>file</th><th>line</th><th>value</th></tr>".$this->report."\r\n</table>\r\n</div>" : false);
+			$report.="\r\n<!-- *************************************************** -->";
+			$report.="\r\n<!-- END DEBUGER -->";
+			$report.="\r\n<!-- *************************************************** -->";
+			$this->report=false;
 			if($echo){
 				echo $report;
 				return true;
@@ -218,25 +227,25 @@ class debuger{
 	 *
 	 * @author Vlahovic
 	 */
-	static public final function _b($data=false){
-		self::set_backtrace_level_to_2(true);
-		self::set_enable_report(true);
-		self::breakpoint($data);
-		self::set_enable_report(false);
-		self::report();
-		self::set_backtrace_level_to_2(false);
+	public final function _b($data=false){
+		$this->set_backtrace_level_to_2(true);
+		$this->set_enable_report(true);
+		$this->breakpoint($data);
+		$this->set_enable_report(false);
+		$this->report();
+		$this->set_backtrace_level_to_2(false);
 	}
 
 	/**
 	 * zkraceny zapis, ktery zaridi debug vypsani backtrace
 	 */
-	static public final function _bt(){
-		self::set_backtrace_level_to_2(true);
-		self::set_enable_report(true);
-		self::backtrace();
-		self::set_enable_report(false);
-		self::report();
-		self::set_backtrace_level_to_2(false);
+	public final function _bt(){
+		$this->set_backtrace_level_to_2(true);
+		$this->set_enable_report(true);
+		$this->backtrace();
+		$this->set_enable_report(false);
+		$this->report();
+		$this->set_backtrace_level_to_2(false);
 	}
 
 	/**
@@ -244,13 +253,13 @@ class debuger{
 	 *
 	 * @param mixed $var
 	 */
-	static public final function _vd($var){
-		self::set_backtrace_level_to_2(true);
-		self::set_enable_report(true);
-		self::var_dump($var);
-		self::set_enable_report(false);
-		self::report();
-		self::set_backtrace_level_to_2(false);
+	public final function _vd($var){
+		$this->set_backtrace_level_to_2(true);
+		$this->set_enable_report(true);
+		$this->var_dump($var);
+		$this->set_enable_report(false);
+		$this->report();
+		$this->set_backtrace_level_to_2(false);
 	}
 
 	/* ************************************************************************ */
@@ -263,32 +272,32 @@ class debuger{
 	 *
 	 * @param boolean $set
 	 */
-	private static function set_backtrace_level_to_2($set){
-		self::$backtrace_level=($set ? 2 : 1);
+	private function set_backtrace_level_to_2($set){
+		$this->backtrace_level=($set ? 2 : 1);
 	}
 
 	/**
 	 * naplneni backtrace
 	 */
-	private static function set_backtrace()
+	private function set_backtrace()
 	{
-		self::$backtrace=debug_backtrace();
-		self::$file=str_ireplace(array('\\',_ROOT,'/'),array('/',false,' <b>/</b> '),self::$backtrace[self::$backtrace_level]['file']);
-		self::$line=self::$backtrace[self::$backtrace_level]['line'];
+		$this->backtrace=debug_backtrace();
+		$this->file=str_ireplace(array('\\',_ROOT,'/'),array('/',false,' <b>/</b> '),$this->backtrace[$this->backtrace_level]['file']);
+		$this->line=$this->backtrace[$this->backtrace_level]['line'];
 	}
 
 	/**
 	 * posklada radek reportu
 	 */
-	private static function set_report(){
-		self::$report.="\r\n\t<tr>";
-		self::$report.="\r\n\t\t<td class=\"".self::$type."\">&nbsp;</td>";
-		self::$report.="\r\n\t\t<td nowrap=\"nowrap\">".(round((self::get_microtime() - _DEBUGER_MICROTIME_START),4))."</td>";
-		self::$report.="\r\n\t\t<td nowrap=\"nowrap\">".self::$type.'</td>';
-		self::$report.="\r\n\t\t<td nowrap=\"nowrap\">".self::$file.'</td>';
-		self::$report.="\r\n\t\t<td nowrap=\"nowrap\">".self::$line.'</td>';
-		self::$report.="\r\n\t\t<td><div class=\"value\">".self::$value.'</div></td>';
-		self::$report.="\r\n\t</tr>";
+	private function set_report(){
+		$this->report.="\r\n\t<tr>";
+		$this->report.="\r\n\t\t<td class=\"".$this->type."\">&nbsp;</td>";
+		$this->report.="\r\n\t\t<td nowrap=\"nowrap\">".(round(($this->get_microtime() - _DEBUGER_MICROTIME_START),4))."</td>";
+		$this->report.="\r\n\t\t<td nowrap=\"nowrap\">".$this->type.'</td>';
+		$this->report.="\r\n\t\t<td nowrap=\"nowrap\">".$this->file.'</td>';
+		$this->report.="\r\n\t\t<td nowrap=\"nowrap\">".$this->line.'</td>';
+		$this->report.="\r\n\t\t<td><div class=\"value\">".$this->value.'</div></td>';
+		$this->report.="\r\n\t</tr>";
 	}
 
 	/**
@@ -297,12 +306,9 @@ class debuger{
 	 * @param mixed $var
 	 * @return string
 	 */
-	private static function catch_var_dump($var){
+	private function catch_var_dump($var){
 		ob_start();
 		var_dump($var);
 		return ob_get_clean();
 	}
 }
-
-
-define('_DEBUGER_MICROTIME_START',debuger::get_microtime());

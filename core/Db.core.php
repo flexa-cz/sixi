@@ -1,6 +1,6 @@
 <?php
 namespace core;
-class Db{
+class Db extends Core{
 	private $config_file_address="core/config.ini";
 	// pripojeni k db
 	private $mysql_address=false;
@@ -36,16 +36,16 @@ class Db{
 				// pripojeni
 				$this->mysql_connect=mysql_connect($this->mysql_address, $this->mysql_user, $this->mysql_password);
 				if($this->mysql_connect){
-					debuger::breakpoint('Databázový server je připojený.');
+					$this->debuger->breakpoint('Databázový server je připojený.');
 					$this->selectDatabase();
 				}
 				else{
-					debuger::breakpoint('Nepodařilo se připojit k databázovemu serveru.');
+					$this->debuger->breakpoint('Nepodařilo se připojit k databázovemu serveru.');
 					$this->able_to_vote=false;
 				}
 			}
 			else{
-				debuger::breakpoint('Nepodařilo se přihlašovací údaje k databázi.');
+				$this->debuger->breakpoint('Nepodařilo se přihlašovací údaje k databázi.');
 				$this->able_to_vote=false;
 			}
 		}
@@ -59,15 +59,15 @@ class Db{
 				mysql_query("SET CHARACTER SET utf8",$this->mysql_connect);
 				mysql_query('SET NAMES utf8',$this->mysql_connect);
 				$this->mysql_connect=$this->mysql_connect;
-				debuger::breakpoint('Databaze je vybraná.');
+				$this->debuger->breakpoint('Databaze je vybraná.');
 			}
 			else{
-				debuger::breakpoint('Nepořilo se vybrat databázi.');
+				$this->debuger->breakpoint('Nepořilo se vybrat databázi.');
 				$this->able_to_vote=false;
 			}
 		}
 		else{
-			debuger::breakpoint('Není nastavena databáze, ke které se má přihlásit.');
+			$this->debuger->breakpoint('Není nastavena databáze, ke které se má přihlásit.');
 		}
 		return $this;
 	}
@@ -85,7 +85,7 @@ class Db{
 	 */
 	public final function query($query){
 		$this->result=@mysql_query($query,$this->mysql_connect);
-		debuger::breakpoint(
+		$this->debuger->breakpoint(
 						$this->result ?
 						$query :
 						mysql_error($this->mysql_connect)._N._N.$query
@@ -106,7 +106,7 @@ class Db{
 			}
 		}
 		else{
-			debuger::breakpoint();
+			$this->debuger->breakpoint();
 		}
 		return $this->rows;
 	}
