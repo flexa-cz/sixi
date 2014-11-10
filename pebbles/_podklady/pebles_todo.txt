@@ -21,6 +21,7 @@ D - hotovo
 ----------
 | HOTOVO |
 ----------
+D 10.11.14 13:46 - config.ini i pro adresar projektu
 D 10.11.14 10:16 - rozlisovac produkcniho a testovaciho prostredi (asi v konfigu)
 D 10.11.14 10:16 - udelat praci s view
 D 10.11.14 10:15 - debuger (zmena ze staticke tridy, zacleneni do core)

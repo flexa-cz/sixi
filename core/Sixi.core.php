@@ -16,7 +16,6 @@ namespace core;
 	private $allowed_controllers=array();
 	private $default_controller;
 	private $actual_controller;
-	private $config_file_address="core/config.ini";
 	private $config;
 
 	/**
@@ -87,6 +86,7 @@ namespace core;
 		$this->debuger=new Debuger();
 		$this->debuger->set_localhost($this->config['general']['localhost']);
 		$this->debuger->set_ui($this->config['general']['debuger_ui']);
+		$this->setEnableDebuger(true);
 		return $this;
 	}
 
@@ -95,8 +95,7 @@ namespace core;
 	/* ************************************************************************ */
 
 	private function setConfig(){
-		$config=parse_ini_file(_ROOT.$this->config_file_address,true);
-		unset($config['mysql']);
+		$config=$this->loader->printConfig();
 		$this->config=$config;
 		return $this;
 	}
@@ -129,6 +128,7 @@ namespace core;
 
 	private function setDb(){
 		$this->db=$this->loader->getCore('Db');
+		$this->db->connect($this->config);
 		return $this;
 	}
 

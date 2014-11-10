@@ -56,6 +56,21 @@ class Loader extends Core{
 		return $this;
 	}
 
+	public function printConfig(){
+		$return=null;
+		$file_addresses=array(
+				_PROJECT_ROOT.'config.ini',
+				_ROOT.'core/config.ini',
+		);
+		foreach($file_addresses as $file_address){
+			if(file_exists($file_address)){
+				$return=parse_ini_file($file_address, true);
+				break;
+			}
+		}
+		return $return;
+	}
+
 	/*	 * *********************************************************************** */
 	/* protected methods */
 	/*	 * *********************************************************************** */

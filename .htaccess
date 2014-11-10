@@ -1,0 +1,8 @@
+# disable directory listing
+Options -Indexes
+
+# disale ini files to display
+<Files ~ "\.ini$">
+Order allow,deny
+Deny from all
+</Files>

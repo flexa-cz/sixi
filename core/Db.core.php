@@ -1,7 +1,6 @@
 <?php
 namespace core;
 class Db extends Core{
-	private $config_file_address="core/config.ini";
 	// pripojeni k db
 	private $mysql_address=false;
 	private $mysql_user=false;
@@ -22,10 +21,9 @@ class Db extends Core{
 	 * @staticvar mixed $cache pokud se podari pripojit tak obsahuje ukazatel pripojeni, jinak false
 	 * @return mixed bud ukazatel pripojeni, nebo false
 	 */
-	public final function connect(){
+	public final function connect(array $config){
 		if($this->mysql_connect===null){
 			// nacte nastaveni pripojeni
-			$config=parse_ini_file(_ROOT.$this->config_file_address,true);
 			if(isset($config['mysql']) && is_array($config['mysql']) && count($config['mysql'])){
 				// nastaveni ze souboru
 				$this->mysql_address=$config['mysql']['address'];
@@ -40,12 +38,12 @@ class Db extends Core{
 					$this->selectDatabase();
 				}
 				else{
-					$this->debuger->breakpoint('Nepodařilo se připojit k databázovemu serveru.');
+					$this->debuger->breakpoint('Nepodařilo se připojit k databázovému serveru.');
 					$this->able_to_vote=false;
 				}
 			}
 			else{
-				$this->debuger->breakpoint('Nepodařilo se přihlašovací údaje k databázi.');
+				$this->debuger->breakpoint('Neexistují přihlašovací údaje k databázi.');
 				$this->able_to_vote=false;
 			}
 		}
@@ -62,7 +60,7 @@ class Db extends Core{
 				$this->debuger->breakpoint('Databaze je vybraná.');
 			}
 			else{
-				$this->debuger->breakpoint('Nepořilo se vybrat databázi.');
+				$this->debuger->breakpoint('Nepodařilo se vybrat databázi.');
 				$this->able_to_vote=false;
 			}
 		}
