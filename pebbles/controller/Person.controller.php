@@ -12,6 +12,7 @@ class Person extends core\Controller{
 	private $person_types=array('child'=>'dítě','parent'=>'rodič','doctor'=>'lékař');
 
 	public function render(){
+		$this->site->setLayout('Person');
 		$action=$this->site->printGetVariable('action');
 		$this->debuger->var_dump($action);
 		$this->site->setTitle($this->site_title);
@@ -33,11 +34,9 @@ class Person extends core\Controller{
 			$person['person_type']=$this->person_types[$person['person_type']];
 			$table[]=$person;
 		}
-		$this->site->addContent(_N.'<h2>'.$this->title.'</h2>');
+		$this->site->data['title_h2']=$this->title;
 		$person_table=$this->loader->getView('Table')->setOrderBy(true)->setHeader(array('id'=>'ID','type'=>'typ','name'=>'jméno','surname'=>'příjmení','date_birth'=>'datum narození','action'=>'akce'))->setRows($table);
-		$this->site->addContent($person_table);
-		$add_button='<a href="?action=add_person" class="button add">nový záznam</a>';
-		$this->site->addContent($add_button);
+		$this->site->data['person_table']=$person_table;
 		return $this;
 	}
 }

@@ -20,6 +20,7 @@ class Loader extends Core{
 	/*	 * *********************************************************************** */
 	/* public methods */
 	/*	 * *********************************************************************** */
+
 	public function getCore($core_name, array $params=null){
 		return $this->getObject('core', $core_name, $params);
 	}
@@ -37,7 +38,7 @@ class Loader extends Core{
 	}
 
 	public function requireCore($object_name){
-		$this->requireClass('core', $object_name);
+		$this->requireFile('core', $object_name);
 		return $this;
 	}
 
@@ -71,6 +72,33 @@ class Loader extends Core{
 		return $return;
 	}
 
+	public function printLayout(){
+		$layout=$this->site->getLayout();
+		$return=false;
+		if($layout){
+			$file_paths=$this->printFilePaths('layout', $layout);
+			$layout_find=false;
+			foreach($file_paths as $file_path){
+				if(file_exists($file_path)){
+					$site=$this->site;
+					ob_start();
+					include($file_path);
+					$return=ob_get_contents();
+					ob_end_clean();
+					$layout_find=true;
+					break;
+				}
+			}
+			if(!$layout_find){
+				throw new Exception('Layout didnt find ('.$layout.').');
+			}
+		}
+		else{
+			throw new Exception('Layout didnt set.');
+		}
+		return $return;
+	}
+
 	/*	 * *********************************************************************** */
 	/* protected methods */
 	/*	 * *********************************************************************** */
@@ -78,11 +106,12 @@ class Loader extends Core{
 	/*	 * *********************************************************************** */
 	/* private methods */
 	/*	 * *********************************************************************** */
+
 	private function getObject($object_type, $object_name, array $params=null){
 		$return=null;
 		if(in_array($object_type, $this->objects)){
 			if(empty($this->objects[$object_type][$object_name])){
-				$object=$this->requireClass($object_type, $object_name)->loadObject($object_type, $object_name);
+				$object=$this->requireFile($object_type, $object_name)->loadObject($object_type, $object_name);
 				$return=$this->setObjectParams($object, $params);
 				$this->objects[$object_type][$object_name]=$return;
 			}
@@ -106,22 +135,26 @@ class Loader extends Core{
 		return $object;
 	}
 
-	private function requireClass($object_type, $object_name){
-		if(!$this->isAlreadyRequiredClass($object_type, $object_name)){
-			$file_root=($object_type==='core' ? _ROOT.'core/' : _PROJECT_ROOT.$object_type.'/');
-			$lower_object_name=strtolower($object_name);
-			$uc_first_object_name=ucfirst($object_name);
-			$file_paths=array(
-					$file_root.$object_name.'.'.$object_type.'.php',
-					$file_root.$lower_object_name.'.'.$object_type.'.php',
-					$file_root.$uc_first_object_name.'.'.$object_type.'.php',
-			);
-			if($object_type==='view'){
-				$file_paths[]=_ROOT.'core/'.$object_type.'/'.$object_name.'.'.$object_type.'.php';
-				$file_paths[]=_ROOT.'core/'.$object_type.'/'.$lower_object_name.'.'.$object_type.'.php';
-				$file_paths[]=_ROOT.'core/'.$object_type.'/'.$uc_first_object_name.'.'.$object_type.'.php';
-			}
+	private function printFilePaths($object_type, $object_name){
+		$lower_object_name=strtolower($object_name);
+		$uc_first_object_name=ucfirst($object_name);
+		$file_paths=array(
+				// nejdriv hleda v adresari projektu, aby slo vse prepsat
+				_PROJECT_ROOT.($object_type!=='core' ? $object_type.'/' : false).$object_name.'.'.$object_type.'.php',
+				_PROJECT_ROOT.($object_type!=='core' ? $object_type.'/' : false).$lower_object_name.'.'.$object_type.'.php',
+				_PROJECT_ROOT.($object_type!=='core' ? $object_type.'/' : false).$uc_first_object_name.'.'.$object_type.'.php',
+				// az potom v adresari core
+				_ROOT.'core/'.($object_type!=='core' ? $object_type.'/' : false).$object_name.'.'.$object_type.'.php',
+				_ROOT.'core/'.($object_type!=='core' ? $object_type.'/' : false).$lower_object_name.'.'.$object_type.'.php',
+				_ROOT.'core/'.($object_type!=='core' ? $object_type.'/' : false).$uc_first_object_name.'.'.$object_type.'.php',
+		);
+		return $file_paths;
+	}
+
+	private function requireFile($object_type, $object_name){
+		if(!$this->isAlreadyRequiredFile($object_type, $object_name)){
 			$file_exists=false;
+			$file_paths=$this->printFilePaths($object_type, $object_name);
 			foreach($file_paths as $path){
 				if(file_exists($path)){
 					require_once($path);
@@ -136,7 +169,7 @@ class Loader extends Core{
 		return $this;
 	}
 
-	private function isAlreadyRequiredClass($object_type, $object_name){
+	private function isAlreadyRequiredFile($object_type, $object_name){
 		$return=false;
 		$object_str=strtolower($object_type).'/'.strtolower($object_name);
 		if(in_array($object_str, $this->already_required_classes)){

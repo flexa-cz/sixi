@@ -56,7 +56,8 @@ namespace core;
 	public function printSite(){
 		$this->setActualController();
 		$this->loader->getController($this->actual_controller)->render();
-		return $this->site;
+		return $this->loader->printLayout();
+//		return $this->site;
 	}
 
 	public function setDefaultController($controller){

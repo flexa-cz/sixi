@@ -22,6 +22,9 @@ $site=(empty($site) ? null : $site);
 </head>
 <body>
 	<h1><?php echo $site->getTitle() ?></h1>
+	<h2><?php echo $site->data['title_h2'] ?></h2>
+	<?php echo $site->data['person_table'] ?>
+	<a href="?action=add_person" class="button add">nový záznam</a>
 	<?php echo $site->getDebuger()->get_panel(); ?>
 </body>
 </html>

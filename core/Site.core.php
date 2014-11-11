@@ -4,11 +4,13 @@ namespace core;
  * resi html stranu a jeji nezbytne soucasti...
  */
 class Site extends Core{
+	public $data;
 	private $site=false;
 	private $content=false;
 	private $title=false;
 	private $header=array();
 	private $highlight;
+	private $layout='Default';
 
 	/* ************************************************************************ */
 	/* magic methods																														*/
@@ -98,6 +100,23 @@ class Site extends Core{
 		return $this->printVariable('env',$name,$default);
 	}
 
+	final public function setLayout($layout){
+		$this->layout=(string)$layout;
+		return $this;
+	}
+
+	final public function getLayout(){
+		return $this->layout;
+	}
+
+	function getTitle() {
+		return $this->title;
+	}
+
+	function getHeader() {
+		return $this->header;
+	}
+
 	/* ************************************************************************ */
 	/* private methods																													*/
 	/* ************************************************************************ */
@@ -148,50 +167,6 @@ class Site extends Core{
 		}
 		return $this;
 	}
-
-	/**
-	 * html hlavicka
-	 *
-	 * @param string $title [optional]
-	 * @return string
-	 *
-	 * @since 28.11.11 10:30
-	 * @author Vlahovic
-	 */
-	final private function header(){
-		$r='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-		$r.=_N.'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cs" lang="cs">';
-		$r.=_N.'<head>';
-		$r.=_N_T.'<meta http-equiv="content-type" content="text/html; charset=utf-8" />';
-		$r.=_N_T.'<meta http-equiv="Content-language" content="cs" />';
-		$r.=_N_T.'<meta http-equiv="imagetoolbar" content="no" />';
-		$r.=_N_T.'<meta http-equiv="cache-control" content="cache" />';
-		$r.=($this->title ? _N_T.'<title>'.$this->title.'</title>' : false);
-		if(!empty($this->header)){
-			$r.=_N_T.implode(_N_T,$this->header);
-		}
-		$r.=_N.'<style>';
-		$r.=_N.$this->debuger->get_css();
-		$r.=_N.'</style>';
-		$r.=_N.'</head>';
-		$r.=_N.'<body>';
-		return $r;
-	}
-
-	/**
-	 * html paticka
-	 *
-	 * @since 28.11.11 10:30
-	 * @author Vlahovic
-	 * @return string
-	 */
-	final private function footer(){
-		$r=$this->debuger->get_panel();
-		$r.=_N.'</body>';
-		$r.=_N.'</html>';
-		return $r;
-	}
-
 }
 
 function odzvyraznit($matches) {
