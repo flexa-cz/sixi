@@ -14,7 +14,7 @@ $root=str_replace(array('\\','include.php'),array('/',false),__FILE__);
 define('_ROOT',$root);
 
 // vlozi nezbytne soubory
-require_once(_ROOT.'constants.php');
+require_once(_ROOT.'core/constants.php');
 
 // core tridy
 require_once(_ROOT.'core/Core.core.php');

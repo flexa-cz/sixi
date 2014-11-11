@@ -159,7 +159,6 @@ class Loader extends Core{
 				if(file_exists($path)){
 					require_once($path);
 					$file_exists=true;
-					break;
 				}
 			}
 			if(!$file_exists){
@@ -183,13 +182,13 @@ class Loader extends Core{
 
 	private function loadObject($object_type, $object_name){
 		$object=false;
-		$class_my=($object_type==='core' ? 'core\\'.$object_name : _PROJECT.'\\'.$object_type.'\\'.$object_name);
-		$class_core=($object_type==='core' ? false : 'core\\'.$object_type.'\\'.$object_name);
-		if(class_exists($class_my)){
-			$object=new $class_my;
+		$project_class=($object_type==='core' ? 'core\\'.$object_name : _PROJECT.'\\'.$object_type.'\\'.$object_name);
+		$core_class=($object_type==='core' ? false : 'core\\'.$object_type.'\\'.$object_name);
+		if(class_exists($project_class)){
+			$object=new $project_class;
 		}
-		elseif($class_core && class_exists($class_core)){
-			$object=new $class_core;
+		elseif($core_class && class_exists($core_class)){
+			$object=new $core_class;
 		}
 		if($object_type==='model'){
 			$object->setDb($this->db);
