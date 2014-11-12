@@ -27,15 +27,9 @@ $site=(empty($site) ? null : $site);
 	if(!empty($site->data['person_table'])){
 	echo $site->data['person_table'] ?>
 	<a href="?action=add_person" class="button add">nový záznam</a>
-	<?php } else {?>
-	<form action="" method="post">
-		<select name="person_type">
-			<option value="child">dítě</option>
-			<option value="parent">rodič</option>
-			<option value="doctor">lékař</option>
-		</select>
-	</form>
-	<?php } ?>
+	<?php } else {
+		echo $site->data['add_person_form'];
+	} ?>
 	<?php echo $site->getDebuger()->get_panel(); ?>
 </body>
 </html>

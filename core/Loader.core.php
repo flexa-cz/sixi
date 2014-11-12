@@ -7,7 +7,7 @@ namespace core;
  * @since 5.11.2014, 15:27:55
  */
 class Loader extends Core{
-	private $objects=array('core','model','view','controller');
+	private $objects=array('core','model','view','controller','form', 'library');
 	private $already_required_classes=array();
 	private $db;
 	private $site;
@@ -39,6 +39,11 @@ class Loader extends Core{
 
 	public function requireCore($object_name){
 		$this->requireFile('core', $object_name);
+		return $this;
+	}
+
+	public function requireLibrary($library_name){
+		$this->requireFile('library', $library_name);
 		return $this;
 	}
 
@@ -99,6 +104,18 @@ class Loader extends Core{
 		return $return;
 	}
 
+	public function getForm($form_name){
+		$return=false;
+		$file_paths=$this->printFilePaths('form', $form_name);
+		foreach($file_paths as $file_path){
+			if(file_exists($file_path)){
+				$return=file_get_contents($file_path);
+				break;
+			}
+		}
+		return $return;
+	}
+
 	/*	 * *********************************************************************** */
 	/* protected methods */
 	/*	 * *********************************************************************** */
@@ -138,15 +155,33 @@ class Loader extends Core{
 	private function printFilePaths($object_type, $object_name){
 		$lower_object_name=strtolower($object_name);
 		$uc_first_object_name=ucfirst($object_name);
+		$file_suffix='.'.$object_type.'.php';
+		if($object_type==='form'){
+			$file_suffix='.'.$object_type.'.html';
+		}
+		elseif($object_type==='library'){
+			$file_suffix='.php';
+		}
 		$file_paths=array(
 				// nejdriv hleda v adresari projektu, aby slo vse prepsat
-				_PROJECT_ROOT.($object_type!=='core' ? $object_type.'/' : false).$object_name.'.'.$object_type.'.php',
-				_PROJECT_ROOT.($object_type!=='core' ? $object_type.'/' : false).$lower_object_name.'.'.$object_type.'.php',
-				_PROJECT_ROOT.($object_type!=='core' ? $object_type.'/' : false).$uc_first_object_name.'.'.$object_type.'.php',
+				_PROJECT_ROOT.($object_type!=='core' ? $object_type.'/' : false).$object_name.$file_suffix,
+				_PROJECT_ROOT.($object_type!=='core' ? $object_type.'/' : false).$lower_object_name.$file_suffix,
+				_PROJECT_ROOT.($object_type!=='core' ? $object_type.'/' : false).$uc_first_object_name.$file_suffix,
 				// az potom v adresari core
-				_ROOT.'core/'.($object_type!=='core' ? $object_type.'/' : false).$object_name.'.'.$object_type.'.php',
-				_ROOT.'core/'.($object_type!=='core' ? $object_type.'/' : false).$lower_object_name.'.'.$object_type.'.php',
-				_ROOT.'core/'.($object_type!=='core' ? $object_type.'/' : false).$uc_first_object_name.'.'.$object_type.'.php',
+				_ROOT.'core/'.($object_type!=='core' ? $object_type.'/' : false).$object_name.$file_suffix,
+				_ROOT.'core/'.($object_type!=='core' ? $object_type.'/' : false).$lower_object_name.$file_suffix,
+				_ROOT.'core/'.($object_type!=='core' ? $object_type.'/' : false).$uc_first_object_name.$file_suffix,
+
+				// to stejne jeste zanorene v adresari
+
+				// nejdriv hleda v adresari projektu, aby slo vse prepsat
+				_PROJECT_ROOT.($object_type!=='core' ? $object_type.'/' : false).$object_name.'/'.$object_name.$file_suffix,
+				_PROJECT_ROOT.($object_type!=='core' ? $object_type.'/' : false).$object_name.'/'.$lower_object_name.$file_suffix,
+				_PROJECT_ROOT.($object_type!=='core' ? $object_type.'/' : false).$object_name.'/'.$uc_first_object_name.$file_suffix,
+				// az potom v adresari core
+				_ROOT.'core/'.($object_type!=='core' ? $object_type.'/' : false).$object_name.'/'.$object_name.$file_suffix,
+				_ROOT.'core/'.($object_type!=='core' ? $object_type.'/' : false).$object_name.'/'.$lower_object_name.$file_suffix,
+				_ROOT.'core/'.($object_type!=='core' ? $object_type.'/' : false).$object_name.'/'.$uc_first_object_name.$file_suffix,
 		);
 		return $file_paths;
 	}

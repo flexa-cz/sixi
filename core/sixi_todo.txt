@@ -44,6 +44,7 @@ D 8.11.14 23:08 - Url predelat ze staticke na normalni
 ------------
 - v ostrem provozu bude potreba zarucit bezpecnost dat
 - co opravneni ruznych uzivatelu
+- HELPER - udelatko, co se da zavolat ve view, nebo layoutu (formatovani datumu, obrazku, ...)
 
 ----------
 | ZADANI |
