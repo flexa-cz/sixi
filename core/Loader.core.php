@@ -7,7 +7,7 @@ namespace core;
  * @since 5.11.2014, 15:27:55
  */
 class Loader extends Core{
-	private $objects=array('core','model','view','controller','form', 'library');
+	private $objects=array('core','model','view','controller','snippet', 'library');
 	private $already_required_classes=array();
 	private $db;
 	private $site;
@@ -104,9 +104,9 @@ class Loader extends Core{
 		return $return;
 	}
 
-	public function getForm($form_name){
+	public function getSnippet($snippet_name){
 		$return=false;
-		$file_paths=$this->printFilePaths('form', $form_name);
+		$file_paths=$this->printFilePaths('snippet', $snippet_name);
 		foreach($file_paths as $file_path){
 			if(file_exists($file_path)){
 				$return=file_get_contents($file_path);
@@ -156,7 +156,7 @@ class Loader extends Core{
 		$lower_object_name=strtolower($object_name);
 		$uc_first_object_name=ucfirst($object_name);
 		$file_suffix='.'.$object_type.'.php';
-		if($object_type==='form'){
+		if($object_type==='snippet'){
 			$file_suffix='.'.$object_type.'.html';
 		}
 		elseif($object_type==='library'){
