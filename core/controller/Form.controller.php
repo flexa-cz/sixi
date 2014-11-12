@@ -24,6 +24,7 @@ class Form extends core\Controller{
 	/*	 * *********************************************************************** */
 
 	public function setSnippetName($snippet_name) {
+		$this->debuger->breakpoint('Begin setSnippetName');
 		if($snippet_name){
 			$this->snippet_name = $snippet_name;
 			$this->loader->requireLibrary('simple_html_dom');
@@ -36,6 +37,7 @@ class Form extends core\Controller{
 		else{
 			throw new Exception('Snippet name must be set.');
 		}
+		$this->debuger->breakpoint('End setSnippetName');
 		return $this;
 	}
 
@@ -52,6 +54,7 @@ class Form extends core\Controller{
 	}
 
 	public function setValues(array $values){
+		$this->debuger->breakpoint('Begin setValues');
 		foreach($values as $item_name => $item_value){
 			$item_index=$this->printItemIndex($item_name);
 			if($item_index!==false){
@@ -59,6 +62,7 @@ class Form extends core\Controller{
 				$this->setValue($this->items[$item_index]);
 			}
 		}
+		$this->debuger->breakpoint('End setValues');
 		return $this;
 	}
 
