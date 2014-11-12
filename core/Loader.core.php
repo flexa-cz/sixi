@@ -107,11 +107,16 @@ class Loader extends Core{
 	public function getSnippet($snippet_name){
 		$return=false;
 		$file_paths=$this->printFilePaths('snippet', $snippet_name);
+		$file=false;
 		foreach($file_paths as $file_path){
 			if(file_exists($file_path)){
+				$file=true;
 				$return=file_get_contents($file_path);
 				break;
 			}
+		}
+		if(!$file){
+			throw new Exception('Snippet "'.$snippet_name.'" doesnt exists.');
 		}
 		return $return;
 	}

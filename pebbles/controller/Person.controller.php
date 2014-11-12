@@ -26,7 +26,11 @@ class Person extends core\Controller{
 		else{
 			$this->site->data['title_h2']='Nový uživatel';
 			$form=$this->loader->getController('Form');
-			$this->site->data['add_person_form']=$form->setSnippetName('person_form')->render();
+			$default_values=array(
+					'person.name'=>'Rohovin',
+					'person.surname'=>'Ctyrrohy',
+			);
+			$this->site->data['add_person_form']=$form->setSnippetName('person_form')->setValues($default_values)->render();
 		}
 		return $this;
 	}

@@ -10,6 +10,10 @@ use core;
 class Form extends core\Controller{
 	private $snippet_name;
 	private $items;
+	private $form;
+	private $form_attributes;
+	private $original_html;
+	private $dom;
 
 	/*	 * *********************************************************************** */
 	/* magic methods */
@@ -20,7 +24,18 @@ class Form extends core\Controller{
 	/*	 * *********************************************************************** */
 
 	public function setSnippetName($snippet_name) {
-		$this->snippet_name = $snippet_name;
+		if($snippet_name){
+			$this->snippet_name = $snippet_name;
+			$this->loader->requireLibrary('simple_html_dom');
+			$this->original_html=$this->loader->getSnippet($this->snippet_name);
+			$this
+							->setDom()
+							->setForm()
+							->setItems();
+		}
+		else{
+			throw new Exception('Snippet name must be set.');
+		}
 		return $this;
 	}
 
@@ -30,11 +45,21 @@ class Form extends core\Controller{
 			throw new Exception('Snippet name must be set.');
 		}
 		else{
-			$this->loader->requireLibrary('simple_html_dom');
-			$return=$this->loader->getSnippet($this->snippet_name);
-			$this->parseHtml($return);
+			$return=$this->dom->root->innertext();
+//			$return=$this->original_html;
 		}
 		return $return;
+	}
+
+	public function setValues(array $values){
+		foreach($values as $item_name => $item_value){
+			$item_index=$this->printItemIndex($item_name);
+			if($item_index!==false){
+				$this->items[$item_index]['value']=$item_value;
+				$this->setValue($this->items[$item_index]);
+			}
+		}
+		return $this;
 	}
 
 	/*	 * *********************************************************************** */
@@ -45,20 +70,58 @@ class Form extends core\Controller{
 	/* private methods */
 	/*	 * *********************************************************************** */
 
-	private function parseHtml($html){
-		$dom=str_get_html($html);
-		$form=$dom->getElementsByTagName('form');
+	private function printItemIndex($item_name){
+		$return=false;
+		foreach($this->items as $index => $item){
+			if(!empty($item['name']) && $item['name']===$item_name){
+				$return=$index;
+				break;
+			}
+		}
+		return $return;
+	}
+
+	private function setDom(){
+		$this->dom=str_get_html($this->original_html);
+		return $this;
+	}
+
+	private function setForm(){
+		$this->form=$this->dom->getElementsByTagName('form');
+		$this->form_attributes=$this->form->nodes[2]->parent->attr;
+		return $this;
+	}
+
+	private function setValue(array $item){
+		if($item['tag_type']==='input'){
+			$this->setInputValue($item);
+		}
+		return $this;
+	}
+
+	private function setInputValue($item){
+		$inputs=$this->form->find($item['tag_type']);
+		foreach($inputs as $input){
+			$tag_item=str_get_html($input)->nodes[1]->attr;
+			if($tag_item['name']===$item['name']){
+				$input->value=$item['value'];
+			}
+		}
+		return $this;
+	}
+
+	private function setItems(){
 		$tag_types=array('input','select','textarea');
 		foreach($tag_types as $tag_type){
-			$inputs=$form->find($tag_type);
+			$inputs=$this->form->find($tag_type);
 			foreach($inputs as $input){
 				$item=str_get_html($input)->nodes[1]->attr;
-				$this->addItem($tag_type, $item);
+				$this->setItem($tag_type, $item);
 			}
 		}
 	}
 
-	private function addItem($tag_type, array $item){
+	private function setItem($tag_type, array $item){
 		$index=count($this->items);
 		$this->items[$index]=$item;
 		$this->items[$index]['tag_type']=$tag_type;
