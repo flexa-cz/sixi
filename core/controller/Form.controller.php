@@ -6,6 +6,9 @@ use core;
  *
  * @author Pragodata {@link http://www.pragodata.cz} Vlahovic
  * @since 12.11.2014, 11:27:32
+ * @todo predelat hledani v domu tak, aby se pokazde neprochazelo vse, ale nasypat to jednou na zacatku do zasobniku
+ * @todo pro kazdy formular na strance vygenerovat nejaky hash s omezenou platnosti pro kontrolu
+ * @todo navic hash bude slouzit k identifikaci daneho formulare v prida, kdyz jich bude na strance vice
  */
 class Form extends core\Controller{
 	private $snippet_name;
@@ -26,13 +29,8 @@ class Form extends core\Controller{
 	public function setSnippetName($snippet_name) {
 		$this->debuger->breakpoint('Begin setSnippetName');
 		if($snippet_name){
-			$this->snippet_name = $snippet_name;
-			$this->loader->requireLibrary('simple_html_dom');
-			$this->original_html=$this->loader->getSnippet($this->snippet_name);
-			$this
-							->setDom()
-							->setForm()
-							->setItems();
+			$this->snippet_name=$snippet_name;
+			$this->initForm();
 		}
 		else{
 			throw new Exception('Snippet name must be set.');
@@ -74,6 +72,16 @@ class Form extends core\Controller{
 	/* private methods */
 	/*	 * *********************************************************************** */
 
+	private function initForm(){
+		$this->loader->requireLibrary('simple_html_dom');
+		$this->original_html=$this->loader->getSnippet($this->snippet_name);
+		$this
+						->setDom()
+						->setForm()
+						->setItems();
+		return $this;
+	}
+
 	private function printItemIndex($item_name){
 		$return=false;
 		foreach($this->items as $index => $item){
@@ -97,13 +105,83 @@ class Form extends core\Controller{
 	}
 
 	private function setValue(array $item){
-		if($item['tag_type']==='input'){
-			$this->setInputValue($item);
+		if($item['tag_type']==='input' && $item['type']==='text'){
+			$this->setInputTextValue($item);
+		}
+		elseif($item['tag_type']==='input' && $item['type']==='radio'){
+			$this->setInputRadioValue($item);
+		}
+		elseif($item['tag_type']==='input' && $item['type']==='checkbox'){
+			$this->setInputCheckboxValue($item);
+		}
+		elseif($item['tag_type']==='select'){
+			$this->setSelectValue($item);
+		}
+		elseif($item['tag_type']==='textarea'){
+			$this->setTextareaValue($item);
+		}
+		else{
+			throw new Exception('Unknown form item type "'.$item['tag_type'].'"');
 		}
 		return $this;
 	}
 
-	private function setInputValue($item){
+	private function setTextareaValue($item){
+		$textareas=$this->form->find($item['tag_type']);
+		foreach($textareas as $textarea){
+			$tag_item=str_get_html($textarea)->nodes[1]->attr;
+			if($tag_item['name']===$item['name']){
+				$textarea->innertext=$item['value'];
+			}
+		}
+		return $this;
+	}
+
+	private function setSelectValue($item){
+		$selects=$this->form->find($item['tag_type']);
+		foreach($selects as $select){
+			$tag_item=str_get_html($select)->nodes[1]->attr;
+			if($tag_item['name']===$item['name']){
+				$this->setOptionSelected($select, $item['value']);
+			}
+		}
+		return $this;
+	}
+
+	private function setOptionSelected($select, $value){
+		$options=$select->find('option');
+		foreach($options as $option){
+			$tag_item=str_get_html($option)->nodes[1]->attr;
+			if($tag_item['value']===$value){
+				$option->selected='selected';
+			}
+		}
+		return $this;
+	}
+
+	private function setInputCheckboxValue($item){
+		$inputs=$this->form->find($item['tag_type']);
+		foreach($inputs as $input){
+			$tag_item=str_get_html($input)->nodes[1]->attr;
+			if($tag_item['name']===$item['name'] && $item['value']){
+				$input->checked='checked';
+			}
+		}
+		return $this;
+	}
+
+	private function setInputRadioValue($item){
+		$inputs=$this->form->find($item['tag_type']);
+		foreach($inputs as $input){
+			$tag_item=str_get_html($input)->nodes[1]->attr;
+			if($tag_item['name']===$item['name'] && $tag_item['value']===$item['value']){
+				$input->checked='checked';
+			}
+		}
+		return $this;
+	}
+
+	private function setInputTextValue($item){
 		$inputs=$this->form->find($item['tag_type']);
 		foreach($inputs as $input){
 			$tag_item=str_get_html($input)->nodes[1]->attr;

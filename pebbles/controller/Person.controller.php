@@ -25,12 +25,18 @@ class Person extends core\Controller{
 		}
 		else{
 			$this->site->data['title_h2']='Nový uživatel';
-			$form=$this->loader->getController('Form');
 			$default_values=array(
 					'person.name'=>'Rohovin',
 					'person.surname'=>'Ctyrrohy',
+					'radio'=>'3',
+					'checkbox'=>'1',
+					'person.person_type'=>'parent',
+					'bigarea'=>'lorem ipsum dolor sit amet... SUPER!!!',
 			);
-			$this->site->data['add_person_form']=$form->setSnippetName('person_form')->setValues($default_values)->render();
+			$this->site->data['add_person_form']=$this->loader->getController('Form')
+							->setSnippetName('person_form')
+							->setValues($default_values)
+							->render();
 		}
 		return $this;
 	}
