@@ -10,16 +10,16 @@ D - hotovo
 | UKOLY |
 ---------
 - tridu core\Report predelat ze staticke a zjistit jak a kde se pouziva
-- pri nacitani souboru vkladat vsechny mozne soubory v poli, protoze je mozne, ze pokud jsou stejne v core i projektu, tak se bude extendovat
 - prace s vyjimkami
 - napojeni TreeTraversal
 - core view Buttons
 - zpracovavac formularu
-- snippets
 
 ----------
 | HOTOVO |
 ----------
+D 13.11.14 21:03 - pri nacitani souboru vkladat vsechny mozne soubory v poli, protoze je mozne, ze pokud jsou stejne v core i projektu, tak se bude extendovat
+D 13.11.14 18:27 - snippets
 D 11.11.14 9:34 - site je podivnost
 	D 11.11.14 9:34 - do layoutu predavat objekt s daty a od vystup layoutu zachytit a vratit jako string
 	D 11.11.14 9:34 (zustane jako objekt na predavani informaci o strance) - site asi odstranit, nebo vymyslet, k cemu by to mohlo byt dobre
