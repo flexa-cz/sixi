@@ -85,9 +85,17 @@ class Form extends core\Controller{
 	private function setSubmitedData(){
 		$method=(empty($this->form_attributes['method']) ? 'post' : $this->form_attributes['method']);
 		$data=($method==='post' ? $_POST : $_GET);
+		// zpracovava jen po odeslani naseho formulare
 		if(!empty($data['sixi_security_hash'])){
+			// dal posle jen data, ktera jsou skutecne ve formulari
+			$submited_data=array();
+			foreach($this->items as $item){
+				if(isset($data[$item['name']])){
+					$submited_data[$item['name']]=$data[$item['name']];
+				}
+			}
 			$this->setValues($data);
-			$this->submited_data=$data;
+			$this->submited_data=$submited_data;
 		}
 	}
 
