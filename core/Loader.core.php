@@ -12,6 +12,7 @@ class Loader extends Core{
 	private $db;
 	private $site;
 	private $url;
+	private $session;
 
 	/*	 * *********************************************************************** */
 	/* magic methods */
@@ -59,6 +60,11 @@ class Loader extends Core{
 
 	public function setUrl(Url $url){
 		$this->url=$url;
+		return $this;
+	}
+
+	public function setSession(Session $session){
+		$this->session=$session;
 		return $this;
 	}
 
@@ -237,6 +243,7 @@ class Loader extends Core{
 			$object
 							->setLoader($this)
 							->setSite($this->site)
+							->setSession($this->session)
 							;
 		}
 		elseif($object_type==='view'){

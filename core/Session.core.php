@@ -7,38 +7,24 @@ namespace core;
  */
 
 /**
- * Description of Controller
+ * Description of Session
  *
  * @author Pragodata {@link http://www.pragodata.cz} Vlahovic
- * @since 7.11.2014, 11:56:55
+ * @since 14.11.2014, 16:30:05
  */
-class Controller extends Core{
-	protected $loader;
-	protected $site;
-	protected $session;
-
+class Session extends Core{
 	/*	 * *********************************************************************** */
 	/* magic methods */
 	/*	 * *********************************************************************** */
 
+	public function __construct() {
+		session_start();
+		$this->debuger->breakpoint('session started');
+	}
+
 	/*	 * *********************************************************************** */
 	/* public methods */
 	/*	 * *********************************************************************** */
-
-	public function setLoader(Loader $loader){
-		$this->loader=$loader;
-		return $this;
-	}
-
-	public function setSite(Site $site){
-		$this->site=$site;
-		return $this;
-	}
-
-	public function setSession(Session $session){
-		$this->session=$session;
-		return $this;
-	}
 
 	/*	 * *********************************************************************** */
 	/* protected methods */

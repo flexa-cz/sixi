@@ -12,6 +12,8 @@ namespace core;
 	private $loader;
 	/** @var Url $url */
 	private $url;
+	/** @var Session $session */
+	private $session;
 
 	private $allowed_controllers=array();
 	private $default_controller;
@@ -28,6 +30,7 @@ namespace core;
 						->requireCore('Exception')
 						->requireCore('Debuger')
 						->requireCore('Url')
+						->requireCore('Session')
 						;
 		$this
 						->setConfig()
@@ -40,12 +43,14 @@ namespace core;
 						->setDb()
 						->setSite()
 						->setUrl()
+						->setSession()
 						->setAllowedControllers()
 						;
 		$this->loader
 						->setDb($this->db)
 						->setSite($this->site)
 						->setUrl($this->url)
+						->setSession($this->session)
 						->requireCore('Report')
 						->requireCore('Model')
 						->requireCore('Controller')
@@ -114,6 +119,11 @@ namespace core;
 				$this->actual_controller=$controller;
 			}
 		}
+		return $this;
+	}
+
+	private function setSession(){
+		$this->session=new Session();
 		return $this;
 	}
 
