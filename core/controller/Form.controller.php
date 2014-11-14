@@ -165,7 +165,7 @@ class Form extends core\Controller{
 		foreach($textareas as $textarea){
 			$tag_item=str_get_html($textarea)->nodes[1]->attr;
 			if($tag_item['name']===$item['name']){
-				$textarea->innertext=$item['value'];
+				$textarea->innertext=htmlentities($item['value']);
 			}
 		}
 		return $this;
@@ -220,7 +220,7 @@ class Form extends core\Controller{
 		foreach($inputs as $input){
 			$tag_item=str_get_html($input)->nodes[1]->attr;
 			if($tag_item['name']===$item['name']){
-				$input->value=$item['value'];
+				$input->value=htmlentities($item['value']);
 			}
 		}
 		return $this;
