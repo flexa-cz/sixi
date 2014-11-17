@@ -17,9 +17,24 @@ class Session extends Core{
 	/* magic methods */
 	/*	 * *********************************************************************** */
 
-	public function __construct() {
+	public function setDebuger(debuger $debuger) {
+		parent::setDebuger($debuger);
 		session_start();
-		$this->debuger->breakpoint('session started');
+		$this->debuger->breakpoint('Session started.');
+	}
+
+	public function setVariable($group, $name, $value){
+		$_SESSION[$group][$name]=$value;
+		return $this;
+	}
+
+	public function getVariable($group, $name){
+		return (empty($_SESSION[$group][$name]) ? null : $_SESSION[$group][$name]);
+	}
+
+	public function unsetVariable($group, $name){
+		unset($_SESSION[$group][$name]);
+		return $this;
 	}
 
 	/*	 * *********************************************************************** */

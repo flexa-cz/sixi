@@ -13,6 +13,7 @@ class Loader extends Core{
 	private $site;
 	private $url;
 	private $session;
+	private $report;
 
 	/*	 * *********************************************************************** */
 	/* magic methods */
@@ -68,6 +69,11 @@ class Loader extends Core{
 		return $this;
 	}
 
+	public function setReport(Report $report){
+		$this->report=$report;
+		return $this;
+	}
+
 	public function printConfig(){
 		$return=null;
 		$file_addresses=array(
@@ -101,11 +107,11 @@ class Loader extends Core{
 				}
 			}
 			if(!$layout_find){
-				throw new Exception('Layout didnt find ('.$layout.').');
+				throw new SixiException('Layout didnt find ('.$layout.').');
 			}
 		}
 		else{
-			throw new Exception('Layout didnt set.');
+			throw new SixiException('Layout didnt set.');
 		}
 		return $return;
 	}
@@ -122,7 +128,7 @@ class Loader extends Core{
 			}
 		}
 		if(!$file){
-			throw new Exception('Snippet "'.$snippet_name.'" doesnt exists.');
+			throw new SixiException('Snippet "'.$snippet_name.'" doesnt exists.');
 		}
 		return $return;
 	}
@@ -148,7 +154,7 @@ class Loader extends Core{
 			}
 		}
 		else{
-			throw new Exception('Unsupported object type "'.$object_type.'".');
+			throw new SixiException('Unsupported object type "'.$object_type.'".');
 		}
 		return $return;
 	}
@@ -208,7 +214,7 @@ class Loader extends Core{
 				}
 			}
 			if(!$file_exists){
-				throw new Exception('Unexisting file '.$object_type.'/'.$object_name.'.');
+				throw new SixiException('Unexisting file '.$object_type.'/'.$object_name.'.');
 			}
 		}
 		return $this;
@@ -244,6 +250,7 @@ class Loader extends Core{
 							->setLoader($this)
 							->setSite($this->site)
 							->setSession($this->session)
+							->setReport($this->report)
 							;
 		}
 		elseif($object_type==='view'){
@@ -253,7 +260,7 @@ class Loader extends Core{
 			$object->setDebuger($this->debuger);
 		}
 		if(!$object){
-			throw new Exception('Unexisting class "'.$object_type.'/'.$object_name.'".');
+			throw new SixiException('Unexisting class "'.$object_type.'/'.$object_name.'".');
 		}
 		return $object;
 	}

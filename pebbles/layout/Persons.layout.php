@@ -24,6 +24,7 @@ $site=(empty($site) ? null : $site);
 	<h1><?php echo $site->getTitle() ?></h1>
 	<h2><?php echo $site->data['title_h2'] ?></h2>
 	<?php
+	echo $site->data['report'];
 	if(!empty($site->data['person_table'])){
 	echo $site->data['person_table'] ?>
 	<a href="?action=add_person" class="button add">nový záznam</a>

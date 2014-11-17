@@ -38,6 +38,7 @@ class Person extends core\Controller{
 							->setValues($default_values)
 							->render();
 		}
+		$this->site->data['report']=$this->report->getReport();
 		return $this;
 	}
 

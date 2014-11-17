@@ -9,13 +9,6 @@ use core;
 class Person extends core\Model{
 
 	public function printPersons(){
-		return $this->controllReadiness()->db->query("SELECT * FROM persons")->getRows();
-	}
-
-	private function controllReadiness(){
-		if(empty($this->db)){
-			throw new Exception('Param Db is required.');
-		}
-		return $this;
+		return $this->db->query("SELECT * FROM persons")->getRows();
 	}
 }

@@ -11,6 +11,7 @@ legend{color: #09f;font-style: italic;font-size: 70%;}
 label{width:240px;float: left;clear: both;margin-top: 5px;font-size: 80%;}
 input[type=text],select,textarea{width:500px;float: left;margin-top: 5px;}
 input.WidthAuto,select.WidthAuto,textarea.WidthAuto,.WidthAuto{width: auto;}
+span.required{color: red; font-weight: bold; font-size: 120%; line-height: 100%;}
 
 /* ************************************************************************** */
 /* report																																			*/

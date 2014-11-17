@@ -102,7 +102,7 @@ class TreeTraversal extends Core{
 	 * @param stdClass $item
 	 * @param integer $id
 	 * @return \TreeTraversal
-	 * @throws Exception
+	 * @throws SixiException
 	 */
 	public function load(stdClass $item=null, $id=null){
 		$this->reset();
@@ -113,7 +113,7 @@ class TreeTraversal extends Core{
 			$data=array('id'=>(int)$id);
 		}
 		else{
-			throw new Exception('Cant load item without relevant data!');
+			throw new SixiException('Cant load item without relevant data!');
 		}
 		$prepared_data=$this->getPreparedKeysValues($data);
 		$query="
@@ -127,11 +127,11 @@ class TreeTraversal extends Core{
 				$this->softLoadRecord($record);
 			}
 			else{
-				throw new Exception('Cant load node!');
+				throw new SixiException('Cant load node!');
 			}
 		}
 		catch(Exception $exc){
-			throw new Exception('Error during loading node. ('.$exc->getMessage().'; file: '.$exc->getFile().'; line: '.$exc->getLine().')');
+			throw new SixiException('Error during loading node. ('.$exc->getMessage().'; file: '.$exc->getFile().'; line: '.$exc->getLine().')');
 		}
 
 		return $this;
@@ -141,7 +141,7 @@ class TreeTraversal extends Core{
 	 * facade pro pridani noveho potomka za vsechny stavajici
 	 * @param stdClass $data
 	 * @return stdClass
-	 * @throws Exception
+	 * @throws SixiException
 	 */
 	public function addChildren(stdClass $data){
 		$this->transactionStart();
@@ -242,7 +242,7 @@ class TreeTraversal extends Core{
 
 	/**
 	 * @return type
-	 * @throws Exception
+	 * @throws SixiException
 	 */
 	public function getLastItem(){
 		return $this->n()->softLoadRecord($this->db->get_record_sql("SELECT ".$this->columns_string." FROM {".$this->table."} ".($this->base_string ? ' WHERE '.$this->base_string : false)." ORDER BY id DESC LIMIT 1"));
@@ -417,7 +417,7 @@ class TreeTraversal extends Core{
 				}
 			}
 			else{
-				throw new Exception('No parent loaded.');
+				throw new SixiException('No parent loaded.');
 			}
 		}
 		$transaction->allow_commit();
@@ -561,25 +561,25 @@ class TreeTraversal extends Core{
 	 * provadi se automaticky po kazde zmene stromu
 	 * a nedovoli commit narusenych dat do db
 	 * @return \TreeTraversal
-	 * @throws Exception
+	 * @throws SixiException
 	 */
 	private function controlTree(){
 		$this->setRoot();
 		$message='Inconsistent state of tree traversal table. ';
 		if(!$this->controlTree1()){
-			throw new Exception($message.'Control error 1.');
+			throw new SixiException($message.'Control error 1.');
 		}
 		elseif(!$this->controlTree2()){
-			throw new Exception($message. 'Control error 2.');
+			throw new SixiException($message. 'Control error 2.');
 		}
 		elseif(!$this->controlTree3()){
-			throw new Exception($message. 'Control error 3.');
+			throw new SixiException($message. 'Control error 3.');
 		}
 		elseif(!$this->controlTree4()){
-			throw new Exception($message. 'Control error 4.');
+			throw new SixiException($message. 'Control error 4.');
 		}
 		elseif(!$this->controlTree5()){
-			throw new Exception($message. 'Control error 5.');
+			throw new SixiException($message. 'Control error 5.');
 		}
 		return $this;
 	}
@@ -609,7 +609,7 @@ class TreeTraversal extends Core{
 				$return=($this->db->get_record_sql($query)->cnt>1 ? false : true);
 			}
 			catch(Exception $exc){
-				throw new Exception('Unknown error during control tree 2. ('.$exc->getMessage().')');
+				throw new SixiException('Unknown error during control tree 2. ('.$exc->getMessage().')');
 			}
 		}
 		return $return;
@@ -637,7 +637,7 @@ class TreeTraversal extends Core{
 			}
 		}
 		catch(Exception $exc){
-			throw new Exception('Unknown error during control tree 3. ('.$exc->getMessage().')');
+			throw new SixiException('Unknown error during control tree 3. ('.$exc->getMessage().')');
 		}
 		return $return;
 	}
@@ -699,7 +699,7 @@ class TreeTraversal extends Core{
 			$this->data=$record;
 		}
 		catch(Exception $exc){
-			throw new Exception('Error during soft loading record. ('.$exc->getMessage().')');
+			throw new SixiException('Error during soft loading record. ('.$exc->getMessage().')');
 		}
 
 		return $this;
@@ -709,7 +709,7 @@ class TreeTraversal extends Core{
 	 * jednotlive prvky pole vrati jako objekty TreeTraversal
 	 * @param array $records
 	 * @return array
-	 * @throws Exception
+	 * @throws SixiException
 	 */
 	private function softLoadRecords($records){
 		$return=null;
@@ -720,7 +720,7 @@ class TreeTraversal extends Core{
 			}
 		}
 		else{
-			throw new Exception('Given param must be array.');
+			throw new SixiException('Given param must be array.');
 		}
 		return $return;
 	}
@@ -745,7 +745,7 @@ class TreeTraversal extends Core{
 
 	/**
 	 * presune
-	 * @throws Exception
+	 * @throws SixiException
 	 * @return \TreeTraversal
 	 */
 	private function _move(){
@@ -759,11 +759,11 @@ class TreeTraversal extends Core{
 				$this->debug($query1, '_move')->db->execute($query1);
 			}
 			catch(Exception $exc){
-				throw new Exception('Error during moving node. ('.$exc->getMessage().'; file: '.$exc->getFile().'; line: '.$exc->getLine().')');
+				throw new SixiException('Error during moving node. ('.$exc->getMessage().'; file: '.$exc->getFile().'; line: '.$exc->getLine().')');
 			}
 		}
 		else{
-			throw new Exception('No lft set during move item at tree traversal.');
+			throw new SixiException('No lft set during move item at tree traversal.');
 		}
 		return $this;
 	}
@@ -849,7 +849,7 @@ class TreeTraversal extends Core{
 	/**
 	 * uvolni misto pro uzel
 	 * @return \TreeTraversal
-	 * @throws Exception
+	 * @throws SixiException
 	 */
 	private function openLine(){
 		if($this->move_new_lft){
@@ -859,11 +859,11 @@ class TreeTraversal extends Core{
 				$this->debug($query,'open line')->db->execute($query);
 			}
 			catch(Exception $exc){
-				throw new Exception('Error (1) during open tree for move. ('.$exc->getMessage().'; file: '.$exc->getFile().'; line: '.$exc->getLine().')');
+				throw new SixiException('Error (1) during open tree for move. ('.$exc->getMessage().'; file: '.$exc->getFile().'; line: '.$exc->getLine().')');
 			}
 		}
 		else{
-			throw new Exception('No lft set during during open line at tree traversal.');
+			throw new SixiException('No lft set during during open line at tree traversal.');
 		}
 		return $this;
 	}
@@ -960,7 +960,7 @@ class TreeTraversal extends Core{
 	 * pridani noveho potomka za vsechny stavajici
 	 * @param stdClass $data
 	 * @return stdClass
-	 * @throws Exception
+	 * @throws SixiException
 	 */
 	private function _addChildren(stdClass $data){
 		$return=null;
@@ -974,7 +974,7 @@ class TreeTraversal extends Core{
 				$return=$this->_addItem($data);
 			}
 			catch(Exception $exc){
-				throw new Exception('Cant add children! ('.$exc->getMessage().')');
+				throw new SixiException('Cant add children! ('.$exc->getMessage().')');
 			}
 		}
 		return $return;
@@ -1022,7 +1022,7 @@ class TreeTraversal extends Core{
 			}
 		}
 		catch(Exception $exc){
-			throw new Exception('Error during saving new node. ('.$exc->getMessage().', '.$this->db->get_last_error().')');
+			throw new SixiException('Error during saving new node. ('.$exc->getMessage().', '.$this->db->get_last_error().')');
 		}
 		return $return->controlTree();
 	}
@@ -1099,7 +1099,7 @@ class TreeTraversal extends Core{
 			$this->base_string="{".$this->table."}.".$base_column."='".$base_value."'";
 		}
 		elseif($base_column || $base_value){
-			throw new Exception('Base value and base key must be set both!');
+			throw new SixiException('Base value and base key must be set both!');
 		}
 		return $this;
 	}
@@ -1119,10 +1119,10 @@ class TreeTraversal extends Core{
 	 */
 	private function setTable($table){
 		if(!$this->isTableExists($table)){
-			throw new Exception('Unexisting table "'.$table.'"!');
+			throw new SixiException('Unexisting table "'.$table.'"!');
 		}
 		elseif(!$this->hasTableTraversalStructure($table)){
-			throw new Exception('Unexisting required columns at table "'.$table.'"! ('.implode(', ', $this->required_columns).')');
+			throw new SixiException('Unexisting required columns at table "'.$table.'"! ('.implode(', ', $this->required_columns).')');
 		}
 		else{
 			$this->table=$table;

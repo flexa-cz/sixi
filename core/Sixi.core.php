@@ -14,6 +14,8 @@ namespace core;
 	private $url;
 	/** @var Session $session */
 	private $session;
+	/** @var Report $report */
+	private $report;
 
 	private $allowed_controllers=array();
 	private $default_controller;
@@ -27,10 +29,11 @@ namespace core;
 	public function __construct(){
 		$this->setLoader();
 		$this->loader
-						->requireCore('Exception')
+						->requireCore('SixiException')
 						->requireCore('Debuger')
 						->requireCore('Url')
 						->requireCore('Session')
+						->requireCore('Report')
 						;
 		$this
 						->setConfig()
@@ -40,17 +43,19 @@ namespace core;
 						->setDebuger($this->debuger)
 						;
 		$this
+						->setSession()
+						->setReport()
 						->setDb()
 						->setSite()
 						->setUrl()
-						->setSession()
 						->setAllowedControllers()
 						;
 		$this->loader
+						->setSession($this->session)
+						->setReport($this->report)
 						->setDb($this->db)
 						->setSite($this->site)
 						->setUrl($this->url)
-						->setSession($this->session)
 						->requireCore('Report')
 						->requireCore('Model')
 						->requireCore('Controller')
@@ -71,7 +76,7 @@ namespace core;
 			$this->default_controller=$_controller;
 		}
 		else{
-			throw new Exception('Not allowed controller "'.$_controller.'".');
+			throw new SixiException('Not allowed controller "'.$_controller.'".');
 		}
 		return $this;
 	}
@@ -108,12 +113,12 @@ namespace core;
 
 	private function setActualController(){
 		if(!$this->default_controller){
-			throw new Exception('Default controller didnt set.');
+			throw new SixiException('Default controller didnt set.');
 		}
 		else{
 			$controller=$this->site->printGetVariable('controller', $this->default_controller);
 			if(!in_array($controller, $this->allowed_controllers)){
-				throw new Exception('Not allowed controller "'.$controller.'".');
+				throw new SixiException('Not allowed controller "'.$controller.'".');
 			}
 			else{
 				$this->actual_controller=$controller;
@@ -123,12 +128,17 @@ namespace core;
 	}
 
 	private function setSession(){
-		$this->session=new Session();
+		$this->session=$this->loader->getCore('Session');
+		return $this;
+	}
+
+	private function setReport(){
+		$this->report=$this->loader->getCore('Report');
 		return $this;
 	}
 
 	private function setUrl(){
-		$this->url=new Url();
+		$this->url=$this->loader->getCore('Url');
 		return $this;
 	}
 

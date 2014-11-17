@@ -16,6 +16,7 @@ class Controller extends Core{
 	protected $loader;
 	protected $site;
 	protected $session;
+	protected $report;
 
 	/*	 * *********************************************************************** */
 	/* magic methods */
@@ -37,6 +38,11 @@ class Controller extends Core{
 
 	public function setSession(Session $session){
 		$this->session=$session;
+		return $this;
+	}
+
+	public function setReport(Report $report){
+		$this->report=$report;
 		return $this;
 	}
 

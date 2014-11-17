@@ -19,6 +19,9 @@ class Form extends core\Controller{
 	private $dom;
 	private $sixi_security_hash;
 	private $submited_data;
+	private $session_group_name='form_controller';
+	private $allow_insert_to_db;
+	private $hash_name='sixi_security_hash';
 
 	/*	 * *********************************************************************** */
 	/* magic methods */
@@ -29,30 +32,31 @@ class Form extends core\Controller{
 	/*	 * *********************************************************************** */
 
 	public function setSnippetName($snippet_name) {
-		$this->debuger->breakpoint('Begin setSnippetName');
 		if($snippet_name){
 			$this->snippet_name=$snippet_name;
 			$this
 							->initForm()
 							->setSubmitedData()
+							->setAllowInsertToDb()
+							->setSixiSecurityHash()
+							->insertToDb()
 							;
 		}
 		else{
-			throw new Exception('Snippet name must be set.');
+			throw new SixiException('Snippet name must be set.');
 		}
-		$this->debuger->breakpoint('End setSnippetName');
 		return $this;
 	}
 
 	public function render(){
 		$return=false;
 		if(empty($this->snippet_name)){
-			throw new Exception('Snippet name must be set.');
+			throw new SixiException('Snippet name must be set.');
 		}
 		else{
 			$return=$this->dom->root->innertext();
 			if(strpos($return, '</form>')!==false){
-				$hidden_hash_input='<input type="hidden" name="sixi_security_hash" value="'.$this->sixi_security_hash.'" />';
+				$hidden_hash_input='<input type="hidden" name="'.$this->hash_name.'" value="'.$this->sixi_security_hash.'" />';
 				$return="\r\n<!-- BEGIN of form parsed by form controller -->\r\n".str_replace(array('</form>',"\t","\r\n\r\n"), array("\r\n".$hidden_hash_input."\r\n</form>","\r\n",''), $return)."\r\n<!-- END of form parsed by form controller -->\r\n";
 			}
 		}
@@ -82,11 +86,18 @@ class Form extends core\Controller{
 	/* private methods */
 	/*	 * *********************************************************************** */
 
+	private function insertToDb(){
+		if($this->allow_insert_to_db){
+			$this->debuger->breakpoint('insert to db...');
+		}
+		return $this;
+	}
+
 	private function setSubmitedData(){
 		$method=(empty($this->form_attributes['method']) ? 'post' : $this->form_attributes['method']);
 		$data=($method==='post' ? $_POST : $_GET);
 		// zpracovava jen po odeslani naseho formulare
-		if(!empty($data['sixi_security_hash'])){
+		if(!empty($data[$this->hash_name])){
 			// dal posle jen data, ktera jsou skutecne ve formulari
 			$submited_data=array();
 			foreach($this->items as $item){
@@ -96,7 +107,55 @@ class Form extends core\Controller{
 			}
 			$this->setValues($data);
 			$this->submited_data=$submited_data;
+			$this->submited_data[$this->hash_name]=(!empty($data[$this->hash_name]) ? $data[$this->hash_name] : false);
 		}
+		return $this;
+	}
+
+	private function setAllowInsertToDb(){
+		$this->allow_insert_to_db=false;
+		$submited_sixi_security_hash=$this->session->getVariable($this->session_group_name, $this->hash_name);
+		if($submited_sixi_security_hash!==$this->submited_data[$this->hash_name]){
+			$this->report->setReport('Vypršela platnost kontrolního řetězce. Odešlete prosím formulář znovu.', 'alert');
+		}
+		elseif($this->controlData()){
+			$this->allow_insert_to_db=true;
+		}
+		return $this;
+	}
+
+	private function controlData(){
+		$return=true;
+//		echo '<div style="background: red; color: #ffc; font-weight: bold; padding: .3em 1em; margin: 1em 0 0 0; font-size: 130%; font-family: Courier, monospace;">$this->items</div><div style="border: 1px solid red; background: #ffc; padding: 1em; margin: 0 0 1em 0; overflow: auto; font-family: Courier, monospace;"><pre>';var_export($this->items);echo '</pre><p style="font-size: 75%; color: red;">';foreach(debug_backtrace() as $values){echo '<em># <b>file:</b> '.$values['file'].'; <b>line:</b> '.$values['line'].'; <b>function:</b> '.$values['class'].'::'.$values['function'].'</em><br>';}echo '<br><b>file: </b>'.__FILE__.'<br><b>line: </b>'.__LINE__.'</p></div>';
+		foreach($this->items as $item_key => $item){
+			if($item['tag_type']==='input' && $item['type']==='date'){
+				$this->contollDate($item_key, $item);
+			}
+		}
+		return $return;
+	}
+
+	private function contollDate($item_key, $item){
+		$date=$this->printParsedDate($this->submited_data[$item['name']]);
+		if($date){
+
+		}
+		else{
+			$this->items[$item_key]['add_class']='incorrect';
+			$this->report->setReport('datum neni ve spravnem formatu', 'alert');
+		}
+		return $this;
+	}
+
+	private function printParsedDate($date){
+		$return=null;
+//		try {
+			$parsed_date=new \DateTime($date);
+			$return=$parsed_date->format( 'Y-m-d' );
+//		} catch (\Exception $exc) {
+//				$exc=$exc;
+//		}
+		return $return;
 	}
 
 	private function initForm(){
@@ -105,13 +164,14 @@ class Form extends core\Controller{
 		$this
 						->setDom()
 						->setForm()
-						->setSixiSecurityHash()
-						->setItems();
+						->setItems()
+						;
 		return $this;
 	}
 
 	private function setSixiSecurityHash(){
 		$this->sixi_security_hash=hash('md5', serialize($this->form).time());
+		$this->session->setVariable($this->session_group_name, $this->hash_name,$this->sixi_security_hash);
 		return $this;
 	}
 
@@ -155,7 +215,7 @@ class Form extends core\Controller{
 			$this->setTextareaValue($item);
 		}
 		else{
-			throw new \Exception('Unknown form item type "'.$item['tag_type'].':'.$item['type'].'"');
+			throw new SixiException('Unknown form item type "'.$item['tag_type'].':'.$item['type'].'"');
 		}
 		return $this;
 	}
@@ -165,7 +225,7 @@ class Form extends core\Controller{
 		foreach($textareas as $textarea){
 			$tag_item=str_get_html($textarea)->nodes[1]->attr;
 			if($tag_item['name']===$item['name']){
-				$textarea->innertext=htmlentities($item['value']);
+				$textarea->innertext=htmlspecialchars($item['value'], ENT_QUOTES, "UTF-8");
 			}
 		}
 		return $this;
@@ -220,7 +280,7 @@ class Form extends core\Controller{
 		foreach($inputs as $input){
 			$tag_item=str_get_html($input)->nodes[1]->attr;
 			if($tag_item['name']===$item['name']){
-				$input->value=htmlentities($item['value']);
+				$input->value=htmlspecialchars($item['value'], ENT_QUOTES, "UTF-8");
 			}
 		}
 		return $this;
@@ -235,6 +295,7 @@ class Form extends core\Controller{
 				$this->setItem($tag_type, $item);
 			}
 		}
+		return $this;
 	}
 
 	private function setItem($tag_type, array $item){
