@@ -214,7 +214,7 @@ class Loader extends Core{
 				}
 			}
 			if(!$file_exists){
-				throw new SixiException('Unexisting file '.$object_type.'/'.$object_name.'.');
+				throw new \SixiException('Unexisting file '.$object_type.'/'.$object_name.'.');
 			}
 		}
 		return $this;

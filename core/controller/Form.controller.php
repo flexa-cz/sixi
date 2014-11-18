@@ -136,7 +136,7 @@ class Form extends core\Controller{
 	}
 
 	private function contollDate($item_key, $item){
-		$date=$this->printParsedDate($this->submited_data[$item['name']]);
+		$date=$this->loader->getCore('DateTime')->setDateTime($this->submited_data[$item['name']])->printMachineDateTime();
 		if($date){
 
 		}
@@ -145,17 +145,6 @@ class Form extends core\Controller{
 			$this->report->setReport('datum neni ve spravnem formatu', 'alert');
 		}
 		return $this;
-	}
-
-	private function printParsedDate($date){
-		$return=null;
-//		try {
-			$parsed_date=new \DateTime($date);
-			$return=$parsed_date->format( 'Y-m-d' );
-//		} catch (\Exception $exc) {
-//				$exc=$exc;
-//		}
-		return $return;
 	}
 
 	private function initForm(){
