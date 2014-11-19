@@ -113,9 +113,12 @@ class Form extends core\Controller{
 	}
 
 	private function setAllowInsertToDb(){
-		$this->allow_insert_to_db=false;
+		$this->allow_insert_to_db=null;
 		$submited_sixi_security_hash=$this->session->getVariable($this->session_group_name, $this->hash_name);
-		if($submited_sixi_security_hash!==$this->submited_data[$this->hash_name]){
+		if(!$this->submited_data[$this->hash_name]){
+			$this->allow_insert_to_db=false;
+		}
+		elseif($submited_sixi_security_hash!==$this->submited_data[$this->hash_name]){
 			$this->report->setReport('Vypršela platnost kontrolního řetězce. Odešlete prosím formulář znovu.', 'alert');
 		}
 		elseif($this->controlData()){
@@ -129,7 +132,7 @@ class Form extends core\Controller{
 //		echo '<div style="background: red; color: #ffc; font-weight: bold; padding: .3em 1em; margin: 1em 0 0 0; font-size: 130%; font-family: Courier, monospace;">$this->items</div><div style="border: 1px solid red; background: #ffc; padding: 1em; margin: 0 0 1em 0; overflow: auto; font-family: Courier, monospace;"><pre>';var_export($this->items);echo '</pre><p style="font-size: 75%; color: red;">';foreach(debug_backtrace() as $values){echo '<em># <b>file:</b> '.$values['file'].'; <b>line:</b> '.$values['line'].'; <b>function:</b> '.$values['class'].'::'.$values['function'].'</em><br>';}echo '<br><b>file: </b>'.__FILE__.'<br><b>line: </b>'.__LINE__.'</p></div>';
 		foreach($this->items as $item_key => $item){
 			if($item['tag_type']==='input' && $item['type']==='date'){
-				$this->contollDate($item_key, $item);
+//				$this->contollDate($item_key, $item);
 			}
 		}
 		return $return;
