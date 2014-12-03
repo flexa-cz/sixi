@@ -93,7 +93,7 @@ namespace core;
 		$this->debuger->set_enable_report(($enable_debuger ? true : false));
 	}
 
-	public function setDebuger(debuger $debuger=null){
+	public function setDebuger(){
 		$this->debuger=new Debuger();
 		$this->debuger->set_localhost($this->config['general']['localhost']);
 		$this->debuger->set_ui($this->config['general']['debuger_ui']);
