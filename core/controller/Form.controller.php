@@ -22,6 +22,7 @@ class Form extends core\Controller{
 	private $session_group_name='form_controller';
 	private $allow_insert_to_db;
 	private $hash_name='sixi_security_hash';
+	private $plan=array();
 
 	/*	 * *********************************************************************** */
 	/* magic methods */
@@ -31,11 +32,32 @@ class Form extends core\Controller{
 	/* public methods */
 	/*	 * *********************************************************************** */
 
+	/**
+	 * @param string $snippet_name
+	 * @return \core\controller\Form
+	 * @throws SixiException
+	 */
 	public function setSnippetName($snippet_name) {
 		if($snippet_name){
 			$this->snippet_name=$snippet_name;
 			$this
 							->initForm()
+							;
+		}
+		else{
+			throw new SixiException('Snippet name must be set.');
+		}
+		return $this;
+	}
+
+	/**
+	 * zpracuje odeslana data a ulozi
+	 * @return \core\controller\Form
+	 * @throws SixiException
+	 */
+	public function process(){
+		if($this->snippet_name){
+			$this
 							->setSubmitedData()
 							->setAllowInsertToDb()
 							->setSixiSecurityHash()
@@ -48,6 +70,11 @@ class Form extends core\Controller{
 		return $this;
 	}
 
+	/**
+	 * naparsuje a vrati upraveny formular
+	 * @return string
+	 * @throws SixiException
+	 */
 	public function render(){
 		$return=false;
 		if(empty($this->snippet_name)){
@@ -63,6 +90,11 @@ class Form extends core\Controller{
 		return $return;
 	}
 
+	/**
+	 * nastavi defaultni hodnoty formulare
+	 * @param array $values
+	 * @return \core\controller\Form
+	 */
 	public function setValues(array $values){
 		if(empty($this->submited_data)){
 			$this->debuger->breakpoint('Begin setValues');
@@ -88,9 +120,26 @@ class Form extends core\Controller{
 
 	private function insertToDb(){
 		if($this->allow_insert_to_db){
+			$this->addPlanItems();
+			$this->debuger->var_dump($this->plan);
 			$this->debuger->breakpoint('insert to db...');
 		}
 		return $this;
+	}
+
+	private function addPlanItems(){
+		if($this->submited_data){
+			foreach($this->submited_data as $key => $value){
+				$this->addPlanItem($key, $value);
+			}
+		}
+	}
+
+	private function addPlanItem($key, $value){
+		if(strpos($key, ':')!==false){
+			list($table, $column)=explode(':', $key);
+			$this->plan[$table][$column]=$value;
+		}
 	}
 
 	private function setSubmitedData(){

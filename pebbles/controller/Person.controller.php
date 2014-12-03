@@ -35,6 +35,7 @@ class Person extends core\Controller{
 			);
 			$this->site->data['add_person_form']=$this->loader->getController('Form')
 							->setSnippetName('person_form')
+							->process()
 							->setValues($default_values)
 							->render();
 		}
