@@ -152,12 +152,12 @@ class debuger{
 	 *
 	 * @author Vlahovic
 	 */
-	public final function breakpoint($value=false){
+	public final function breakpoint($value=null, $name=null){
 		if($this->localhost){
 			if($this->enable_report){
 				$this->set_backtrace();
 				$this->type='breakpoint';
-				$this->value=($value ? '<pre>'.htmlentities($value).'</pre>' : '&mdash;');
+				$this->value=$this->printName($name).($value ? '<pre>'.htmlentities($value).'</pre>' : '&mdash;');
 				$this->set_report();
 			}
 		}
@@ -172,12 +172,12 @@ class debuger{
 		}
 	}
 
-	public final function var_dump($var){
+	public final function var_dump($var, $name=null){
 		if($this->localhost){
 			if($this->enable_report){
 				$this->set_backtrace();
 				$this->type='var_dump';
-				$this->value=$this->catch_var_dump($var);
+				$this->value=$this->printName($name).$this->catch_var_dump($var);
 				$this->set_report();
 			}
 		}
@@ -312,5 +312,9 @@ class debuger{
 		ob_start();
 		var_dump($var);
 		return ob_get_clean();
+	}
+
+	private function printName($name=null){
+		return ($name ? $name.'<hr />' : false);
 	}
 }

@@ -61,6 +61,7 @@ class Form extends core\Controller{
 							->setSubmitedData()
 							->setAllowInsertToDb()
 							->setSixiSecurityHash()
+							->setPlan()
 							->insertToDb()
 							;
 		}
@@ -119,26 +120,53 @@ class Form extends core\Controller{
 	/*	 * *********************************************************************** */
 
 	private function insertToDb(){
-		if($this->allow_insert_to_db){
-			$this->addPlanItems();
-			$this->debuger->var_dump($this->plan);
-			$this->debuger->breakpoint('insert to db...');
+		if($this->allow_insert_to_db && $this->plan){
+			$this->debuger->var_dump($this->plan, 'plan');
+			foreach($this->plan as $table => $rows){
+				foreach($rows as $row){
+					$this->insertRowToDb($table, $row);
+				}
+			}
 		}
 		return $this;
 	}
 
-	private function addPlanItems(){
-		if($this->submited_data){
-			foreach($this->submited_data as $key => $value){
-				$this->addPlanItem($key, $value);
+	private function insertRowToDb($table, array $row){
+		if(!empty($row)){
+			$columns=array();
+			$values=array();
+			foreach($row as $column => $value){
+				$columns[]=$column;
+				$values[]=$value;
 			}
+			$this->loader->getModel('Form')->insertRow($table, $columns, $values);
 		}
 	}
 
-	private function addPlanItem($key, $value){
+	private function setPlan(){
+		$this->plan=array();
+		if($this->submited_data){
+			foreach($this->submited_data as $key => $value){
+				if(is_array($value)){
+					foreach($value as $index => $val){
+						$this->addPlanItem($index, $key, $val);
+					}
+				}
+				else{
+					$this->addPlanItem(0, $key, $value);
+				}
+			}
+		}
+		if(empty($this->plan)){
+			$this->plan=false;
+		}
+		return $this;
+	}
+
+	private function addPlanItem($index, $key, $value){
 		if(strpos($key, ':')!==false){
 			list($table, $column)=explode(':', $key);
-			$this->plan[$table][$column]=$value;
+			$this->plan[$table][$index][$column]=$value;
 		}
 	}
 

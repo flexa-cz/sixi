@@ -13,6 +13,7 @@ namespace core;
  * @since 7.11.2014, 11:35:05
  */
 class Model extends Core{
+	/* @var $db core\Db */
 	protected $db;
 
 	/*	 * *********************************************************************** */

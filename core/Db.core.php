@@ -34,16 +34,16 @@ class Db extends Core{
 				// pripojeni
 				$this->mysql_connect=mysql_connect($this->mysql_address, $this->mysql_user, $this->mysql_password);
 				if($this->mysql_connect){
-					$this->debuger->breakpoint('Databázový server je připojený.');
+					$this->debuger->breakpoint('Database server connected.');
 					$this->selectDatabase();
 				}
 				else{
-					$this->debuger->breakpoint('Nepodařilo se připojit k databázovému serveru.');
+					$this->debuger->breakpoint('Cant connect database server.');
 					$this->able_to_vote=false;
 				}
 			}
 			else{
-				$this->debuger->breakpoint('Neexistují přihlašovací údaje k databázi.');
+				$this->debuger->breakpoint('Doesnt set database login and password.');
 				$this->able_to_vote=false;
 			}
 		}
@@ -57,15 +57,15 @@ class Db extends Core{
 				mysql_query("SET CHARACTER SET utf8",$this->mysql_connect);
 				mysql_query('SET NAMES utf8',$this->mysql_connect);
 				$this->mysql_connect=$this->mysql_connect;
-				$this->debuger->breakpoint('Databaze je vybraná.');
+				$this->debuger->breakpoint('Database selected.');
 			}
 			else{
-				$this->debuger->breakpoint('Nepodařilo se vybrat databázi.');
+				$this->debuger->breakpoint('Cant select database.');
 				$this->able_to_vote=false;
 			}
 		}
 		else{
-			$this->debuger->breakpoint('Není nastavena databáze, ke které se má přihlásit.');
+			$this->debuger->breakpoint('Doesnt set database name.');
 		}
 		return $this;
 	}
@@ -82,7 +82,7 @@ class Db extends Core{
 	 * @param string $query
 	 */
 	public final function query($query){
-		$this->result=@mysql_query($query,$this->mysql_connect);
+		$this->result=mysql_query($query,$this->mysql_connect);
 		$this->debuger->breakpoint(
 						$this->result ?
 						$query :

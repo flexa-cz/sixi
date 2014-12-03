@@ -2,10 +2,10 @@
 	<table>
 		<tr>
 			<td>
-				<label for="person:person_type">typ<span class="required"> *</span></label>
+				<label for="persons:person_type">typ<span class="required"> *</span></label>
 			</td>
 			<td>
-				<select name="person:person_type" id="person:person_type" required="required">
+				<select name="persons:person_type" id="persons:person_type" required="required">
 					<option value="">-- vyberte --</option>
 					<option value="child">dítě</option>
 					<option value="parent">rodič</option>
@@ -15,26 +15,26 @@
 		</tr>
 		<tr>
 			<td>
-				<label for="person:name">jméno<span class="required"> *</span></label>
+				<label for="persons:name">jméno<span class="required"> *</span></label>
 			</td>
 			<td>
-				<input type="text" required="required" name="person:name" id="person:name" />
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<label for="person:surname">příjmení<span class="required"> *</span></label>
-			</td>
-			<td>
-				<input type="text" required="required" name="person:surname" id="person:surname" />
+				<input type="text" required="required" name="persons:name" id="persons:name" />
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<label for="person:birth_date">datum narození<span class="required"> *</span></label>
+				<label for="persons:surname">příjmení<span class="required"> *</span></label>
 			</td>
 			<td>
-				<input type="date" name="person:birth_date" id="person:birth_date" />
+				<input type="text" required="required" name="persons:surname" id="persons:surname" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="persons:birth_date">datum narození<span class="required"> *</span></label>
+			</td>
+			<td>
+				<input type="date" name="persons:birth_date" id="persons:birth_date" />
 			</td>
 		</tr>
 		<tr>

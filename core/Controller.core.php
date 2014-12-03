@@ -13,6 +13,7 @@ namespace core;
  * @since 7.11.2014, 11:56:55
  */
 class Controller extends Core{
+	/* @var $loader \core\Loader */
 	protected $loader;
 	protected $site;
 	protected $session;
