@@ -17,7 +17,7 @@ class Core{
 	/* public methods */
 	/*	 * *********************************************************************** */
 
-	public function setDebuger(Debuger $debuger){
+	public function setDebuger(Debuger $debuger=null){
 		$this->debuger=$debuger;
 		return $this;
 	}

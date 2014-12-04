@@ -26,11 +26,11 @@ class Person extends core\Controller{
 		else{
 			$this->site->data['title_h2']='Nový uživatel';
 			$default_values=array(
-					'persons:name'=>'Rohovin',
-					'persons:surname'=>'Ctyrrohy',
+					'person:name'=>'Rohovin',
+					'person:surname'=>'Ctyrrohy',
 					'radio'=>'3',
 					'checkbox'=>'1',
-					'persons:person_type'=>'parent',
+					'person:person_type'=>'parent',
 					'bigarea'=>'lorem ipsum dolor sit amet... SUPER!!!',
 			);
 			$this->site->data['add_person_form']=$this->loader->getController('Form')

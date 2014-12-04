@@ -17,7 +17,7 @@ class Session extends Core{
 	/* magic methods */
 	/*	 * *********************************************************************** */
 
-	public function setDebuger(debuger $debuger) {
+	public function setDebuger(debuger $debuger=null) {
 		parent::setDebuger($debuger);
 		session_start();
 		$this->debuger->breakpoint('Session started.');
