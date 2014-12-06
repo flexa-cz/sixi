@@ -9,15 +9,23 @@ class Db extends Core{
 	private $mysql_connect=null;
 	private $result=null;
 	private $rows=null;
+	private $tables_structure=array();
+
+	/* ------------------------------------------------------------------------ */
+	/* magic methods */
+	/* ------------------------------------------------------------------------ */
 
 	public function __construct()
 	{
 //		$this->connect();
 	}
 
+	/* ------------------------------------------------------------------------ */
+	/* public methods */
+	/* ------------------------------------------------------------------------ */
+
 	/**
 	 * pripojeni k db
-	 *
 	 * @staticvar mixed $cache pokud se podari pripojit tak obsahuje ukazatel pripojeni, jinak false
 	 * @return mixed bud ukazatel pripojeni, nebo false
 	 */
@@ -50,26 +58,6 @@ class Db extends Core{
 		return $this->mysql_connect;
 	}
 
-	private function selectDatabase(){
-		if($this->mysql_database){
-			$sel=mysql_select_db($this->mysql_database);
-			if($sel){
-				mysql_query("SET CHARACTER SET utf8",$this->mysql_connect);
-				mysql_query('SET NAMES utf8',$this->mysql_connect);
-				$this->mysql_connect=$this->mysql_connect;
-				$this->debuger->breakpoint('Database selected.');
-			}
-			else{
-				$this->debuger->breakpoint('Cant select database.');
-				$this->able_to_vote=false;
-			}
-		}
-		else{
-			$this->debuger->breakpoint('Doesnt set database name.');
-		}
-		return $this;
-	}
-
 	public final function setMysqlDatabase($database){
 		$this->mysql_database=$database;
 		return $this;
@@ -96,11 +84,11 @@ class Db extends Core{
 	}
 
 
-	public final function getRows(){
+	public final function getRecords(){
 		$this->rows=array();
 		if($this->result){
 			while($data=mysql_fetch_assoc($this->result)){
-				$this->rows[]=$data;
+				$this->rows[]=(object)$data;
 			}
 		}
 		else{
@@ -109,12 +97,105 @@ class Db extends Core{
 		return $this->rows;
 	}
 
-	public final function getRow($index=0){
-		$this->getRows();
+	public final function getRecord($index=0){
+		$this->getRecords();
 		return $this->rows[(integer) $index];
 	}
 
 	public final function getMysqlConnect(){
 		return $this->mysql_connect;
+	}
+
+	/**
+	 * vlozi novy zaznam do db
+	 * @param string $table
+	 * @param array $record (column=>value, ...)
+	 */
+	public function insertRecord($table, array $record){
+		$return=false;
+		$columns=array_keys($record);
+		if($this->controlTableStructure($table, $columns)){
+			$columns=array();
+			$values=array();
+			foreach($record as $column => $value){
+				$columns[]=mysql_real_escape_string($column);
+				$values[]=mysql_real_escape_string($value);
+			}
+			$query="INSERT INTO `".$table."` (`".implode('`,`', $columns)."`) VALUES ('".implode("','", $values)."');";
+			if($this->query($query)->result){
+				$return=$this->query("SELECT LAST_INSERT_ID() id;")->getRecord()->id;
+			}
+		}
+		return $return;
+	}
+
+	/* ------------------------------------------------------------------------ */
+	/* private methods */
+	/* ------------------------------------------------------------------------ */
+
+	/**
+	 * @param string $table
+	 * @param array $columns (column, ...)
+	 */
+	private function controlTableStructure($table, array $columns){
+		$return=true;
+		$table_structure=$this->printTableStructure($table);
+		if($table_structure){
+			foreach($columns as $column){
+				if(!in_array($column, $table_structure['resume'])){
+					$return=false;
+					throw new \SixiException('Column '.$column.' not exists at table '.$table.'.');
+					break;
+				}
+			}
+		}
+		else{
+			$return=false;
+			throw new \SixiException('Table '.$table.' not exists.');
+		}
+		return $return;
+	}
+
+	private function printTableStructure($table){
+		$return=false;
+		if(!isset($this->tables_structure[$table])){
+			$query="SHOW COLUMNS FROM ".mysql_real_escape_string($table);
+			$records=$this->query($query)->getRecords();
+			if($records){
+				$resume=array();
+				foreach($records as $record){
+					$resume[]=$record->Field;
+				}
+				$records['resume']=$resume;
+				$return=$this->tables_structure[$table]=$records;
+			}
+			else{
+				$this->tables_structure[$table]=$return;
+			}
+		}
+		else{
+			$return=$this->tables_structure[$table];
+		}
+		return $return;
+	}
+
+	private function selectDatabase(){
+		if($this->mysql_database){
+			$sel=mysql_select_db($this->mysql_database);
+			if($sel){
+				mysql_query("SET CHARACTER SET utf8",$this->mysql_connect);
+				mysql_query('SET NAMES utf8',$this->mysql_connect);
+				$this->mysql_connect=$this->mysql_connect;
+				$this->debuger->breakpoint('Database selected.');
+			}
+			else{
+				$this->debuger->breakpoint('Cant select database.');
+				$this->able_to_vote=false;
+			}
+		}
+		else{
+			$this->debuger->breakpoint('Doesnt set database name.');
+		}
+		return $this;
 	}
 }

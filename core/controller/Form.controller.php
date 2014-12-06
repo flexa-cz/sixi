@@ -121,39 +121,45 @@ class Form extends core\Controller{
 
 	private function insertToDb(){
 		if($this->allow_insert_to_db && $this->plan){
-			$this->debuger->var_dump($this->plan, 'plan');
 			foreach($this->plan as $table => $rows){
-				foreach($rows as $row){
-					$this->insertRowToDb($table, $row);
+				foreach($rows as $index => $row){
+					$id=$this->insertRowToDb($table, $row['data']);
+					$this->addPlanItem($index, $table, 'id', $id, 'meta');
 				}
 			}
+			$this->debuger->var_dump($this->plan, 'plan');
 		}
 		return $this;
 	}
 
 	private function insertRowToDb($table, array $row){
+		$return=false;
 		if(!empty($row)){
-			$columns=array();
-			$values=array();
-			foreach($row as $column => $value){
-				$columns[]=$column;
-				$values[]=$value;
-			}
-			$this->loader->getModel('Form')->insertRow($table, $columns, $values);
+			$return=$this->loader->getModel('Form')->insertRow($table, $row);
 		}
+		return $return;
 	}
 
 	private function setPlan(){
 		$this->plan=array();
 		if($this->submited_data){
 			foreach($this->submited_data as $key => $value){
+				if(strpos($key, ':')!==false){
+					list($table, $column)=explode(':', $key);
+				}
+				// pokud nazev neobsahuje : pak neni sloupcem tabulky
+				else{
+					continue;
+				}
+				// muze byt i vic radku v jednom fomulari
 				if(is_array($value)){
 					foreach($value as $index => $val){
-						$this->addPlanItem($index, $key, $val);
+						$this->addPlanItem($index, $table, $column, $val);
 					}
 				}
+				// nebo muze byt radek jen jeden
 				else{
-					$this->addPlanItem(0, $key, $value);
+					$this->addPlanItem(0, $table, $column, $value);
 				}
 			}
 		}
@@ -163,11 +169,8 @@ class Form extends core\Controller{
 		return $this;
 	}
 
-	private function addPlanItem($index, $key, $value){
-		if(strpos($key, ':')!==false){
-			list($table, $column)=explode(':', $key);
-			$this->plan[$table][$index][$column]=$value;
-		}
+	private function addPlanItem($index, $table, $column, $value, $type='data'){
+		$this->plan[$table][$index][$type][$column]=$value;
 	}
 
 	private function setSubmitedData(){
