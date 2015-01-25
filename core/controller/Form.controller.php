@@ -8,7 +8,8 @@ use core;
  * @since 12.11.2014, 11:27:32
  * @todo predelat hledani v domu tak, aby se pokazde neprochazelo vse, ale nasypat to jednou na zacatku do zasobniku
  * @todo pro kazdy formular na strance vygenerovat nejaky hash s omezenou platnosti pro kontrolu
- * @todo navic hash bude slouzit k identifikaci daneho formulare v prida, kdyz jich bude na strance vice
+ * @todo navic hash bude slouzit k identifikaci daneho formulare v pripade, kdyz jich bude na strance vice
+ * @todo inspiraci na moznosti formularu nabrat zde http://www.w3schools.com/tags/tag_input.asp
  */
 class Form extends core\Controller{
 	private $snippet_name;

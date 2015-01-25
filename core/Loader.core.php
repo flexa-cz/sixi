@@ -75,15 +75,15 @@ class Loader extends Core{
 	}
 
 	public function printConfig(){
-		$return=null;
+		$return=array();
 		$file_addresses=array(
-				_PROJECT_ROOT.'config.ini',
 				_ROOT.'core/config.ini',
+				_PROJECT_ROOT.'config.ini',
 		);
 		foreach($file_addresses as $file_address){
 			if(file_exists($file_address)){
-				$return=parse_ini_file($file_address, true);
-				break;
+				$parse_ini_file=parse_ini_file($file_address, true);
+				$return=$this->printMergeConfig($return, $parse_ini_file);
 			}
 		}
 		return $return;
@@ -97,6 +97,7 @@ class Loader extends Core{
 			$layout_find=false;
 			foreach($file_paths as $file_path){
 				if(file_exists($file_path)){
+					// promenna neni pouzita zde, ale v nactenem souboru
 					$site=$this->site;
 					ob_start();
 					include($file_path);
@@ -140,6 +141,20 @@ class Loader extends Core{
 	/*	 * *********************************************************************** */
 	/* private methods */
 	/*	 * *********************************************************************** */
+
+	/**
+	 * spoji dvourozmerna pole tak, ze pres hodnoty prvniho nastavi hodnoty druheho, pokud existuji
+	 * @param array $arr1
+	 * @param array $arr2
+	 */
+	private function printMergeConfig(array $arr1, array $arr2){
+		foreach($arr2 as $k2 => $a2){
+			foreach($a2 as $kk2 => $aa2){
+				$arr1[$k2][$kk2]=$aa2;
+			}
+		}
+		return $arr1;
+	}
 
 	private function getObject($object_type, $object_name, array $params=null){
 		$return=null;

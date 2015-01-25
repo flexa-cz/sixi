@@ -106,8 +106,7 @@ namespace core;
 	/* ************************************************************************ */
 
 	private function setConfig(){
-		$config=$this->loader->printConfig();
-		$this->config=$config;
+		$this->config=$this->loader->printConfig();
 		return $this;
 	}
 
