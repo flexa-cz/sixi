@@ -30,11 +30,8 @@ $site=(empty($site) ? null : $site);
 	<h2><?php echo $site->data['title_h2'] ?></h2>
 	<?php
 	echo $site->data['report'];
-	if(!empty($site->data['person_table'])){
-	echo $site->data['person_table'] ?>
-	<a href="?action=add_person" class="button add">nový záznam</a>
-	<?php } else {
-		echo $site->data['add_person_form'];
+	if(!empty($site->data['content'])) {
+		echo $site->data['content'];
 	} ?>
 	<?php echo $site->getDebuger()->get_panel(); ?>
 </body>

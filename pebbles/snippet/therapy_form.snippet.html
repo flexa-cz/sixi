@@ -1,0 +1,49 @@
+<form action="" method="post">
+	<table>
+		<tr>
+			<td>
+				<label for="person:name">jméno<span class="required"> *</span></label>
+			</td>
+			<td>
+				<input type="text" required="required" name="person:name" id="person:name" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="person:surname">příjmení<span class="required"> *</span></label>
+			</td>
+			<td>
+				<input type="text" required="required" name="person:surname" id="person:surname" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="person:personal_identification_number">rodné číslo<span class="required"> *</span></label>
+			</td>
+			<td>
+				<input type="text" required="required" name="person:personal_identification_number" id="person:personal_identification_number" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="person:insurance">pojišťovna<span class="required"> *</span></label>
+			</td>
+			<td>
+				<input type="text" required="required" name="person:insurance" id="person:insurance" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="person:birth_date">datum narození<span class="required"> *</span></label>
+			</td>
+			<td>
+				<input type="date" name="person:birth_date" id="person:birth_date" placeholder="yyyy-mm-dd" />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<input type="submit" name="save" value="uložit" class="button add" />
+			</td>
+		</tr>
+	</table>
+</form>

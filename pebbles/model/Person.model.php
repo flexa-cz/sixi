@@ -9,6 +9,6 @@ use core;
 class Person extends core\Model{
 
 	public function printPersons(){
-		return $this->db->query("SELECT * FROM persons")->getRecords();
+		return $this->db->query("SELECT * FROM person")->getRecords();
 	}
 }
