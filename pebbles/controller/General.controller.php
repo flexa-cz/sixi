@@ -10,7 +10,7 @@ class General extends core\Controller{
 	private $site_title='Pebbles';
 	private $title='Osoby';
 	private $person_types=array('child'=>'dítě','parent'=>'rodič','doctor'=>'lékař');
-	private $actions=array('patient','scheme','reviews','photos','therapy','list','new');
+	private $actions=array('patient','scheme','reviews','photos','therapy','list');
 
 	/* ======================================================================== */
 	/* public methods */
@@ -41,10 +41,25 @@ class General extends core\Controller{
 	/* ======================================================================== */
 
 	private function renderTherapyForm(){
+		$default_values=array();
+		$id=(int)$this->site->printGetVariable('id');
+		if($id){
+			$model_person=$this->loader->getModel('person');
+			$person_data=$model_person->printPerson($id);
+			$default_values=array(
+					'person:id'=>$person_data->id,
+					'person:name'=>$person_data->name,
+					'person:surname'=>$person_data->surname,
+					'person:birth_date'=>$person_data->birth_date,
+					'person:personal_identification_number'=>$person_data->personal_identification_number,
+					'person:insurance'=>$person_data->insurance,
+					'bigarea'=>'lorem ipsum dolor sit amet... SUPER!!!',
+			);
+		}
 		$this->site->data['content']=$this->loader->getController('Form')
 						->setSnippetName('therapy_form')
 						->process()
-//						->setValues($default_values)
+						->setValues($default_values)
 						->render();
 		return $this;
 	}
@@ -74,7 +89,7 @@ class General extends core\Controller{
 		$this->site->data['title_h2']=$this->title;
 		$this->site->data['content']=$this->loader->getView('Table')
 						->setOrderBy(true)
-						->setHeader(array('id'=>'ID','type'=>'typ','name'=>'jméno','surname'=>'příjmení','date_birth'=>'datum narození','action'=>'akce'))
+						->setHeader(array('id'=>'ID','type'=>'typ','name'=>'jméno','surname'=>'příjmení','date_birth'=>'datum narození','personal_identification_number'=>'rodné číslo','insurance'=>'pojišťovna','action'=>'akce'))
 						->setRows($table);
 		return $this;
 	}
@@ -84,12 +99,12 @@ class General extends core\Controller{
 		foreach($persons as $person){
 			$person=(array)$person;
 			$buttons=array(
-					$this->loader->getView('Button')->printLinkButton('edit', 'upravit', '?child_id='.$person['id'].'&action=edit_person'),
-					$this->loader->getView('Button')->printLinkButton('delete', 'odstranit', '?child_id='.$person['id'].'&action=delete_person'),
+					$this->loader->getView('Button')->printLinkButton('edit', 'terapie', '?id='.$person['id'].'&action=therapy'),
+					$this->loader->getView('Button')->printLinkButton('delete', 'odstranit', '?id='.$person['id'].'&action=delete'),
 			);
 			if($person['person_type']==='child'){
-				$buttons[]=$this->loader->getView('Button')->printLinkButton('info', 'rodiče', '?child_id='.$person['id'].'&action=show_parents');
-				$buttons[]=$this->loader->getView('Button')->printLinkButton('info', 'lékař', '?child_id='.$person['id'].'&action=show_doctor');
+				$buttons[]=$this->loader->getView('Button')->printLinkButton('info', 'rodiče', '?id='.$person['id'].'&action=show_parents');
+				$buttons[]=$this->loader->getView('Button')->printLinkButton('info', 'lékař', '?id='.$person['id'].'&action=show_doctor');
 			}
 			$person[]=implode(false,$buttons);
 			$person['person_type']=(!empty($person['person_type']) ? $this->person_types[$person['person_type']] : false);

@@ -129,6 +129,26 @@ class Db extends Core{
 		return $return;
 	}
 
+	public function updateRecord($table, array $record, $id){
+		$return=false;
+		$columns=array_keys($record);
+		$_id=(int)$id;
+		if(!$id){
+			throw new \SixiException('Id must be integer type.');
+		}
+		elseif($this->controlTableStructure($table, $columns)){
+			$set=array();
+			foreach($record as $column => $value){
+				$set[]="`".mysql_real_escape_string($column)."`='".mysql_real_escape_string($value)."'";
+			}
+			$query="UPDATE `".$table."` SET ".implode(",", $set)." WHERE `id`=".$_id;
+			if($this->query($query)->result){
+				$return=true;
+			}
+		}
+		return $return;
+	}
+
 	/* ------------------------------------------------------------------------ */
 	/* private methods */
 	/* ------------------------------------------------------------------------ */

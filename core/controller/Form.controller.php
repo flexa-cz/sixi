@@ -124,8 +124,13 @@ class Form extends core\Controller{
 		if($this->allow_insert_to_db && $this->plan){
 			foreach($this->plan as $table => $rows){
 				foreach($rows as $index => $row){
-					$id=$this->insertRowToDb($table, $row['data']);
-					$this->addPlanItem($index, $table, 'id', $id, 'meta');
+					if(!empty($row['meta']['id'])){
+						$this->updateRowAtDb($table, $row['data'], $row['meta']['id']);
+					}
+					else{
+						$id=$this->insertRowToDb($table, $row['data']);
+						$this->addPlanItem($index, $table, 'id', $id, 'meta');
+					}
 				}
 			}
 			$this->debuger->var_dump($this->plan, 'plan');
@@ -137,6 +142,14 @@ class Form extends core\Controller{
 		$return=false;
 		if(!empty($row)){
 			$return=$this->loader->getModel('Form')->insertRow($table, $row);
+		}
+		return $return;
+	}
+
+	private function updateRowAtDb($table, array $row, $id){
+		$return=false;
+		if(!empty($row)){
+			$return=$this->loader->getModel('Form')->updateRow($table, $row, $id);
 		}
 		return $return;
 	}
@@ -171,7 +184,13 @@ class Form extends core\Controller{
 	}
 
 	private function addPlanItem($index, $table, $column, $value, $type='data'){
-		$this->plan[$table][$index][$type][$column]=$value;
+		if($column==='id' && (int)$value){
+			$this->plan[$table][$index]['meta'][$column]=(int)$value;
+		}
+		elseif($column!=='id'){
+			$this->plan[$table][$index][$type][$column]=$value;
+		}
+		return $this;
 	}
 
 	private function setSubmitedData(){
